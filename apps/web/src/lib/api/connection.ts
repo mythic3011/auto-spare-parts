@@ -1,4 +1,4 @@
-import { API_BASE_PATH, API_ORIGIN, buildApiUrl } from '$lib/config/endpoints';
+import { API_BASE_PATH, API_ORIGIN, buildApiUrl } from '#lib/config/endpoints.js';
 
 export type ApiConnectionState = {
   reachable: boolean;

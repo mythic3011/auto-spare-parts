@@ -1,19 +1,21 @@
 <script lang="ts">
-  import { page } from '$app/stores';
+  import { page } from '$app/state';
   import { onMount } from 'svelte';
-  import { createAppApiClient } from '$lib/api/app-client';
-  import type { StaffItem } from '$lib/api/types';
-  import PlaceholderView from '$lib/components/layout/PlaceholderView.svelte';
-  import Notice from '$lib/components/ui/Notice.svelte';
-  import ItemFormCard from '$lib/components/feature/items/ItemFormCard.svelte';
-  import { createPageResource } from '$lib/stores/page-resource';
+  import { createAppApiClient } from '#lib/api/app-client.js';
+  import type { StaffItem } from '#lib/api/types.js';
+  import PlaceholderView from '#lib/components/layout/PlaceholderView.svelte';
+  import Notice from '#lib/components/ui/Notice.svelte';
+  import ItemFormCard from '#lib/components/feature/items/ItemFormCard.svelte';
+  import { createPageResource } from '#lib/stores/page-resource.js';
 
   const api = createAppApiClient();
   const state = createPageResource<StaffItem>();
 
   onMount(async () => {
+    const partPublicId = page.params.partPublicId;
+    if (!partPublicId) return;
     const fallbackItem: StaffItem = {
-      partPublicId: $page.params.partPublicId,
+      partPublicId: partPublicId,
       sku: 'ST-FB-4400',
       name: 'Fallback Item',
       category: 'General',
@@ -24,7 +26,7 @@
       updatedAt: '2026-05-23T07:15:00Z'
     };
     await state.load(
-      () => api.getStaffItemDetail($page.params.partPublicId),
+      () => api.getStaffItemDetail(partPublicId),
       fallbackItem,
       'Failed to load item detail'
     );

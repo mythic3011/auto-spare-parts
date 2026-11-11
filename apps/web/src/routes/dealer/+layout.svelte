@@ -1,7 +1,7 @@
 <script lang="ts">
-  import AppShell from '$lib/components/layout/AppShell.svelte';
+  import AppShell from '#lib/components/layout/AppShell.svelte';
   import type { Snippet } from 'svelte';
-  import { APP_ROUTES, type NavItem } from '$lib/config/routes';
+  import { APP_ROUTES, type NavItem } from '#lib/config/routes.js';
 
   const navItems: NavItem[] = [
     { label: 'Orders', href: APP_ROUTES.dealer.orders },
@@ -10,7 +10,7 @@
     { label: 'Profile', href: APP_ROUTES.dealer.profile }
   ];
 
-  let { children } = $props<{ children: Snippet }>();
+  let { children }: { children: Snippet } = $props();
 </script>
 
 <AppShell roleLabel="Dealer Workspace" {navItems}>

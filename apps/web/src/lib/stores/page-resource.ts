@@ -1,5 +1,5 @@
 import { writable } from 'svelte/store';
-import { loadWithFallback } from '$lib/utils/load-with-fallback';
+import { loadWithFallback } from '#lib/utils/load-with-fallback.js';
 
 export type PageResourceState<T> = {
   loading: boolean;

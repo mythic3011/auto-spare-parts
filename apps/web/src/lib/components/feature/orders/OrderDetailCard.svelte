@@ -1,9 +1,9 @@
 <script lang="ts">
-  import type { OrderDetail } from '$lib/api/types';
-  import Card from '$lib/components/ui/Card.svelte';
-  import StatusBadge from '$lib/components/ui/StatusBadge.svelte';
+  import type { OrderDetail } from '#lib/api/types.js';
+  import Card from '#lib/components/ui/Card.svelte';
+  import StatusBadge from '#lib/components/ui/StatusBadge.svelte';
 
-  let { order } = $props<{ order: OrderDetail }>();
+  let { order }: { order: OrderDetail } = $props();
 
   const money = (amount: number) =>
     new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(amount);

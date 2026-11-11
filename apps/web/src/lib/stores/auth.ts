@@ -1,5 +1,5 @@
 import { derived, writable } from 'svelte/store';
-import type { AuthSession } from '$lib/api/types';
+import type { AuthSession } from '#lib/api/types.js';
 
 type AuthState = {
   session: AuthSession | null;

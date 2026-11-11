@@ -1,6 +1,6 @@
 <script lang="ts">
-  import Card from '$lib/components/ui/Card.svelte';
-  let { title, description } = $props<{ title: string; description: string }>();
+  import Card from '#lib/components/ui/Card.svelte';
+  let { title, description }: { title: string; description: string } = $props();
 </script>
 
 <Card class="space-y-2">

@@ -1,8 +1,8 @@
 <script lang="ts">
-  import type { UserProfile } from '$lib/api/types';
-  import Card from '$lib/components/ui/Card.svelte';
+  import type { UserProfile } from '#lib/api/types.js';
+  import Card from '#lib/components/ui/Card.svelte';
 
-  let { title, profile } = $props<{ title: string; profile: UserProfile }>();
+  let { title, profile }: { title: string; profile: UserProfile } = $props();
 </script>
 
 <Card class="space-y-4">

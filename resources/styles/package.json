@@ -11,5 +11,8 @@
     "@tailwindcss/typography": "0.5.20",
     "@tailwindcss/aspect-ratio": "0.4.2",
     "@tailwindcss/container-queries": "0.1.1"
+  },
+  "overrides": {
+    "postcss-selector-parser": "6.1.5"
   }
 }

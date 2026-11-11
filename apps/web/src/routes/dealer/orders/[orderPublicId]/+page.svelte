@@ -1,19 +1,21 @@
 <script lang="ts">
-  import { page } from '$app/stores';
+  import { page } from '$app/state';
   import { onMount } from 'svelte';
-  import OrderDetailCard from '$lib/components/feature/orders/OrderDetailCard.svelte';
-  import { createAppApiClient } from '$lib/api/app-client';
-  import type { OrderDetail } from '$lib/api/types';
-  import PlaceholderView from '$lib/components/layout/PlaceholderView.svelte';
-  import Notice from '$lib/components/ui/Notice.svelte';
-  import { createPageResource } from '$lib/stores/page-resource';
+  import OrderDetailCard from '#lib/components/feature/orders/OrderDetailCard.svelte';
+  import { createAppApiClient } from '#lib/api/app-client.js';
+  import type { OrderDetail } from '#lib/api/types.js';
+  import PlaceholderView from '#lib/components/layout/PlaceholderView.svelte';
+  import Notice from '#lib/components/ui/Notice.svelte';
+  import { createPageResource } from '#lib/stores/page-resource.js';
 
   const api = createAppApiClient();
   const state = createPageResource<OrderDetail>();
 
   onMount(async () => {
+    const orderPublicId = page.params.orderPublicId;
+    if (!orderPublicId) return;
     const fallbackOrder: OrderDetail = {
-      orderPublicId: $page.params.orderPublicId,
+      orderPublicId: orderPublicId,
       dealerName: 'Fallback Dealer',
       totalAmount: 1250,
       status: 'processing',
@@ -27,7 +29,7 @@
       ]
     };
     await state.load(
-      () => api.getDealerOrderDetail($page.params.orderPublicId),
+      () => api.getDealerOrderDetail(orderPublicId),
       fallbackOrder,
       'Failed to load order detail'
     );

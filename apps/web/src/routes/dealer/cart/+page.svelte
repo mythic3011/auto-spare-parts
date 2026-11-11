@@ -1,5 +1,5 @@
 <script lang="ts">
-  import PlaceholderView from '$lib/components/layout/PlaceholderView.svelte';
+  import PlaceholderView from '#lib/components/layout/PlaceholderView.svelte';
 </script>
 
 <PlaceholderView

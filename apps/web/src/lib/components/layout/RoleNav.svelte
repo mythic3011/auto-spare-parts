@@ -1,9 +1,9 @@
 <script lang="ts">
-  import { page } from '$app/stores';
-  import { cn } from '$lib/utils/cn';
-  import type { NavItem } from '$lib/config/routes';
+  import { page } from '$app/state';
+  import { cn } from '#lib/utils/cn.js';
+  import type { NavItem } from '#lib/config/routes.js';
 
-  let { navItems } = $props<{ navItems: NavItem[] }>();
+  let { navItems }: { navItems: NavItem[] } = $props();
 
   const isActive = (href: string, pathname: string) =>
     pathname === href || pathname.startsWith(`${href}/`);
@@ -16,7 +16,7 @@
         <a
           class={cn(
             'block rounded-lg border px-3 py-2 text-sm transition',
-            isActive(item.href, $page.url.pathname)
+            isActive(item.href, page.url.pathname)
               ? 'border-blue-300 bg-blue-100 font-semibold text-blue-700'
               : 'border-slate-200 bg-slate-50 text-slate-900 hover:bg-slate-100'
           )}

@@ -1,7 +1,7 @@
 <script lang="ts">
-  import Card from '$lib/components/ui/Card.svelte';
-  import Button from '$lib/components/ui/Button.svelte';
-  import { APP_ROUTES } from '$lib/config/routes';
+  import Card from '#lib/components/ui/Card.svelte';
+  import Button from '#lib/components/ui/Button.svelte';
+  import { APP_ROUTES } from '#lib/config/routes.js';
 </script>
 
 <main class="mx-auto max-w-3xl p-6">

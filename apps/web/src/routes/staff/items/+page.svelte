@@ -1,13 +1,13 @@
 <script lang="ts">
   import { onMount } from 'svelte';
-  import { createAppApiClient } from '$lib/api/app-client';
-  import type { StaffItem } from '$lib/api/types';
-  import PlaceholderView from '$lib/components/layout/PlaceholderView.svelte';
-  import Notice from '$lib/components/ui/Notice.svelte';
-  import ItemsTable from '$lib/components/feature/items/ItemsTable.svelte';
-  import Button from '$lib/components/ui/Button.svelte';
-  import { APP_ROUTES } from '$lib/config/routes';
-  import { createPageResource } from '$lib/stores/page-resource';
+  import { createAppApiClient } from '#lib/api/app-client.js';
+  import type { StaffItem } from '#lib/api/types.js';
+  import PlaceholderView from '#lib/components/layout/PlaceholderView.svelte';
+  import Notice from '#lib/components/ui/Notice.svelte';
+  import ItemsTable from '#lib/components/feature/items/ItemsTable.svelte';
+  import Button from '#lib/components/ui/Button.svelte';
+  import { APP_ROUTES } from '#lib/config/routes.js';
+  import { createPageResource } from '#lib/stores/page-resource.js';
 
   const api = createAppApiClient();
   const state = createPageResource<StaffItem[]>();

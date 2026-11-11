@@ -1,8 +1,8 @@
 <script lang="ts">
-  import type { NavItem } from '$lib/config/routes';
+  import type { NavItem } from '#lib/config/routes.js';
   import RoleNav from './RoleNav.svelte';
 
-  let { roleLabel, navItems } = $props<{ roleLabel: string; navItems: NavItem[] }>();
+  let { roleLabel, navItems }: { roleLabel: string; navItems: NavItem[] } = $props();
 </script>
 
 <aside class="border-b border-slate-200 bg-white p-4 md:border-b-0 md:border-r">

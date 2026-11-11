@@ -1,4 +1,4 @@
-import { ENABLE_DEV_FALLBACK } from '$lib/config/runtime';
+import { ENABLE_DEV_FALLBACK } from '#lib/config/runtime.js';
 
 export type LoadWithFallbackResult<T> = {
   data: T;

@@ -1,19 +1,19 @@
 <script lang="ts">
-  import type { SparePartSummary } from '$lib/api/types';
-  import Card from '$lib/components/ui/Card.svelte';
-  import Button from '$lib/components/ui/Button.svelte';
+  import type { SparePartSummary } from '#lib/api/types.js';
+  import Card from '#lib/components/ui/Card.svelte';
+  import Button from '#lib/components/ui/Button.svelte';
 
   let {
     title,
     parts,
     actionLabel,
     actionHrefBuilder
-  } = $props<{
+  }: {
     title: string;
     parts: SparePartSummary[];
     actionLabel?: string;
     actionHrefBuilder?: (partPublicId: string) => string;
-  }>();
+  } = $props();
 
   const money = (amount: number) =>
     new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(amount);

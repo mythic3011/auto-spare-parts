@@ -2,14 +2,14 @@
   import { goto } from '$app/navigation';
   import { onMount } from 'svelte';
   import { get } from 'svelte/store';
-  import { createAppApiClient } from '$lib/api/app-client';
-  import type { LoginRequest } from '$lib/api/types';
-  import Button from '$lib/components/ui/Button.svelte';
-  import Card from '$lib/components/ui/Card.svelte';
-  import Notice from '$lib/components/ui/Notice.svelte';
-  import { APP_ROUTES } from '$lib/config/routes';
-  import { authStore } from '$lib/stores/auth';
-  import { defaultRouteForRole } from '$lib/utils/auth-routing';
+  import { createAppApiClient } from '#lib/api/app-client.js';
+  import type { LoginRequest } from '#lib/api/types.js';
+  import Button from '#lib/components/ui/Button.svelte';
+  import Card from '#lib/components/ui/Card.svelte';
+  import Notice from '#lib/components/ui/Notice.svelte';
+  import { APP_ROUTES } from '#lib/config/routes.js';
+  import { authStore } from '#lib/stores/auth.js';
+  import { defaultRouteForRole } from '#lib/utils/auth-routing.js';
 
   const api = createAppApiClient();
   let username = '';
@@ -63,7 +63,7 @@
 </script>
 
 <div class="mx-auto flex min-h-screen max-w-md items-center px-4">
-  <Card className="w-full">
+  <Card class="w-full">
     <h1 class="text-2xl font-semibold text-slate-900">SLMC Portal Login</h1>
     <p class="mt-1 text-sm text-slate-600">Sign in to your dealer or staff workspace.</p>
 

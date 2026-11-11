@@ -1,38 +1,26 @@
 <script lang="ts">
   import '../app.css';
-  import { onMount } from 'svelte';
+  import { onMount, type Snippet } from 'svelte';
   import { goto } from '$app/navigation';
-  import { page } from '$app/stores';
-  import { get } from 'svelte/store';
-  import { authStore } from '$lib/stores/auth';
-  import { resolveGuardRedirect } from '$lib/utils/guard';
-  import Notice from '$lib/components/ui/Notice.svelte';
-  import { apiConnectionStore } from '$lib/stores/api-connection';
+  import { page } from '$app/state';
+  import { authStore } from '#lib/stores/auth.js';
+  import { resolveGuardRedirect } from '#lib/utils/guard.js';
+  import Notice from '#lib/components/ui/Notice.svelte';
+  import { apiConnectionStore } from '#lib/stores/api-connection.js';
 
   async function retryApiConnection() {
     await apiConnectionStore.check();
   }
 
-  onMount(() => {
-    const check = () => {
-      const path = get(page).url.pathname;
-      const role = get(authStore).session?.role ?? null;
-      const target = resolveGuardRedirect(path, role);
-      if (target && target !== path) {
-        goto(target, { replaceState: true });
-      }
-    };
-
-    const unsubscribePage = page.subscribe(check);
-    const unsubscribeAuth = authStore.subscribe(check);
-    void apiConnectionStore.check();
-    check();
-
-    return () => {
-      unsubscribePage();
-      unsubscribeAuth();
-    };
+  let { children }: { children: Snippet } = $props();
+  $effect(() => {
+    const path = page.url.pathname;
+    const role = $authStore.session?.role ?? null;
+    const target = resolveGuardRedirect(path, role);
+    if (target && target !== path) void goto(target, { replace: true });
   });
+  onMount(() => { void apiConnectionStore.check(); });
+
 </script>
 
 <svelte:head>
@@ -55,7 +43,7 @@
           <button
             type="button"
             class="rounded border border-rose-300 bg-rose-100 px-2 py-1 text-xs font-medium text-rose-800 hover:bg-rose-200"
-            on:click={retryApiConnection}
+            onclick={retryApiConnection}
             disabled={$apiConnectionStore.checking}
           >
             {$apiConnectionStore.checking ? 'Checking...' : 'Retry API check'}
@@ -64,5 +52,5 @@
       </Notice>
     </div>
   {/if}
-  <slot />
+  {@render children()}
 </main>

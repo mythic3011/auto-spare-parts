@@ -1,5 +1,5 @@
 <script lang="ts">
-  let { roleLabel } = $props<{ roleLabel: string }>();
+  let { roleLabel }: { roleLabel: string } = $props();
 </script>
 
 <header class="mb-4 rounded-lg border border-slate-200 bg-white px-4 py-3">

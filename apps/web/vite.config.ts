@@ -1,4 +1,6 @@
 import path from 'node:path';
+import adapter from '@sveltejs/adapter-auto';
+import { vitePreprocess } from '@sveltejs/vite-plugin-svelte';
 
 import { sveltekit } from '@sveltejs/kit/vite';
 import autoprefixer from 'autoprefixer';
@@ -10,7 +12,7 @@ export default defineConfig(({ mode, command }) => {
   const proxyTarget = env.VITE_DEV_API_PROXY_TARGET || 'http://localhost:8880';
 
   return {
-    plugins: [sveltekit()],
+    plugins: [sveltekit({ adapter: adapter(), preprocess: vitePreprocess({ script: true }) })],
     resolve: {
       alias: {
         '@': path.resolve('./src')
@@ -36,10 +38,6 @@ export default defineConfig(({ mode, command }) => {
             }
           }
         : undefined
-    },
-    test: {
-      environment: 'node',
-      include: ['tests/**/*.test.ts']
     }
   };
 });

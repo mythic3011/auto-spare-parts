@@ -1,5 +1,5 @@
 import { writable } from 'svelte/store';
-import { probeApiConnection, type ApiConnectionState } from '$lib/api/connection';
+import { probeApiConnection, type ApiConnectionState } from '#lib/api/connection.js';
 
 export type ApiConnectionStoreState = {
   checking: boolean;

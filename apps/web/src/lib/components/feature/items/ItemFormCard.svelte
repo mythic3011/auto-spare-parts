@@ -1,9 +1,9 @@
 <script lang="ts">
-  import type { StaffItem } from '$lib/api/types';
-  import Card from '$lib/components/ui/Card.svelte';
-  import Button from '$lib/components/ui/Button.svelte';
+  import type { StaffItem } from '#lib/api/types.js';
+  import Card from '#lib/components/ui/Card.svelte';
+  import Button from '#lib/components/ui/Button.svelte';
 
-  let { title, description, item } = $props<{ title: string; description: string; item: StaffItem }>();
+  let { title, description, item }: { title: string; description: string; item: StaffItem } = $props();
 </script>
 
 <Card class="space-y-4">

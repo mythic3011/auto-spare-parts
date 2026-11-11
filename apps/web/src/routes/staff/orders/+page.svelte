@@ -1,12 +1,12 @@
 <script lang="ts">
   import { onMount } from 'svelte';
-  import OrdersTable from '$lib/components/feature/orders/OrdersTable.svelte';
-  import PlaceholderView from '$lib/components/layout/PlaceholderView.svelte';
-  import Notice from '$lib/components/ui/Notice.svelte';
-  import { createAppApiClient } from '$lib/api/app-client';
-  import type { OrderSummary } from '$lib/api/types';
-  import { APP_ROUTES } from '$lib/config/routes';
-  import { createPageResource } from '$lib/stores/page-resource';
+  import OrdersTable from '#lib/components/feature/orders/OrdersTable.svelte';
+  import PlaceholderView from '#lib/components/layout/PlaceholderView.svelte';
+  import Notice from '#lib/components/ui/Notice.svelte';
+  import { createAppApiClient } from '#lib/api/app-client.js';
+  import type { OrderSummary } from '#lib/api/types.js';
+  import { APP_ROUTES } from '#lib/config/routes.js';
+  import { createPageResource } from '#lib/stores/page-resource.js';
 
   const api = createAppApiClient();
   const state = createPageResource<OrderSummary[]>();

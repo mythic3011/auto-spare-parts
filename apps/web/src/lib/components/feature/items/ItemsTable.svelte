@@ -1,10 +1,10 @@
 <script lang="ts">
-  import type { StaffItem } from '$lib/api/types';
-  import Card from '$lib/components/ui/Card.svelte';
-  import StatusBadge from '$lib/components/ui/StatusBadge.svelte';
-  import Button from '$lib/components/ui/Button.svelte';
+  import type { StaffItem } from '#lib/api/types.js';
+  import Card from '#lib/components/ui/Card.svelte';
+  import StatusBadge from '#lib/components/ui/StatusBadge.svelte';
+  import Button from '#lib/components/ui/Button.svelte';
 
-  let { items, editBasePath } = $props<{ items: StaffItem[]; editBasePath: string }>();
+  let { items, editBasePath }: { items: StaffItem[]; editBasePath: string } = $props();
 
   const money = (amount: number) =>
     new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(amount);

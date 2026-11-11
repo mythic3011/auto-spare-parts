@@ -1,9 +1,9 @@
 <script lang="ts">
-  import type { OrderSummary } from '$lib/api/types';
-  import StatusBadge from '$lib/components/ui/StatusBadge.svelte';
-  import Card from '$lib/components/ui/Card.svelte';
+  import type { OrderSummary } from '#lib/api/types.js';
+  import StatusBadge from '#lib/components/ui/StatusBadge.svelte';
+  import Card from '#lib/components/ui/Card.svelte';
 
-  let { orders, detailBasePath } = $props<{ orders: OrderSummary[]; detailBasePath: string }>();
+  let { orders, detailBasePath }: { orders: OrderSummary[]; detailBasePath: string } = $props();
 
   const money = (amount: number) =>
     new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(amount);

@@ -1,5 +1,5 @@
-import type { Role } from '$lib/api/types';
-import { APP_ROUTES } from '$lib/config/routes';
+import type { Role } from '#lib/api/types.js';
+import { APP_ROUTES } from '#lib/config/routes.js';
 
 export function roleHome(role: Role): string {
   return role === 'staff' ? APP_ROUTES.staff.orders : APP_ROUTES.dealer.orders;

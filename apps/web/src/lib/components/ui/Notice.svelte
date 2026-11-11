@@ -1,6 +1,6 @@
 <script lang="ts">
   import { cva, type VariantProps } from 'class-variance-authority';
-  import { cn } from '$lib/utils/cn';
+  import { cn } from '#lib/utils/cn.js';
 
   const noticeVariants = cva('rounded-lg border px-3 py-2 text-sm', {
     variants: {
@@ -15,12 +15,12 @@
     }
   });
 
-  let { variant, class: className, children } = $props<
+  let { variant, class: className, children }:
     VariantProps<typeof noticeVariants> & {
       class?: string;
       children: import('svelte').Snippet;
     }
-  >();
+   = $props();
 </script>
 
 <div class={cn(noticeVariants({ variant }), className)}>

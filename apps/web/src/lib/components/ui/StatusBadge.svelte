@@ -1,8 +1,8 @@
 <script lang="ts">
-  import { cn } from '$lib/utils/cn';
-  import type { OrderStatus } from '$lib/api/types';
+  import { cn } from '#lib/utils/cn.js';
+  import type { OrderStatus } from '#lib/api/types.js';
 
-  let { status } = $props<{ status: OrderStatus }>();
+  let { status }: { status: OrderStatus } = $props();
 
   const statusClassMap: Record<OrderStatus, string> = {
     pending: 'bg-amber-100 text-amber-800 border-amber-200',
