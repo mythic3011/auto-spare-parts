@@ -1,0 +1,17 @@
+.git
+.env
+.env.*
+!.env.example
+.idea
+.claude
+**/node_modules
+**/.svelte-kit
+**/build
+**/__pycache__
+.phpunit.cache
+tests/reports
+storage/media/*
+vendor
+apps/api/storage
+
+docs/screenshots

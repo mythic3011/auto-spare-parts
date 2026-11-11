@@ -1,0 +1,336 @@
+{
+  "baseURL": "http://127.0.0.1:8880",
+  "capturedAt": "2026-11-11T23:10:56.459Z",
+  "viewport": {
+    "width": 1440,
+    "height": 1000
+  },
+  "pages": [
+    {
+      "name": "login",
+      "title": "Sign in",
+      "expectedHttp": 200,
+      "route": "/",
+      "finalPath": "/",
+      "http": 200,
+      "failures": []
+    },
+    {
+      "name": "demo-accounts",
+      "title": "Demo account overlay",
+      "route": "/",
+      "http": 200,
+      "failures": []
+    },
+    {
+      "name": "login-dark",
+      "title": "Sign in \u2014 dark theme",
+      "route": "/",
+      "http": 200,
+      "failures": []
+    },
+    {
+      "name": "privacy-policy",
+      "title": "Privacy Policy",
+      "expectedHttp": 200,
+      "route": "/privacy-policy.php",
+      "finalPath": "/privacy-policy.php",
+      "http": 200,
+      "failures": []
+    },
+    {
+      "name": "terms-of-use",
+      "title": "Terms of Use",
+      "expectedHttp": 200,
+      "route": "/terms-of-use.php",
+      "finalPath": "/terms-of-use.php",
+      "http": 200,
+      "failures": []
+    },
+    {
+      "name": "qa",
+      "title": "Q&A",
+      "expectedHttp": 200,
+      "route": "/qa.php",
+      "finalPath": "/qa.php",
+      "http": 200,
+      "failures": []
+    },
+    {
+      "name": "about",
+      "title": "About SLMC",
+      "expectedHttp": 200,
+      "route": "/about.php",
+      "finalPath": "/about.php",
+      "http": 200,
+      "failures": []
+    },
+    {
+      "name": "error-403",
+      "title": "Error 403",
+      "expectedHttp": 403,
+      "route": "/resources/php/error.php?code=403",
+      "finalPath": "/resources/php/error.php",
+      "http": 403,
+      "failures": []
+    },
+    {
+      "name": "error-404",
+      "title": "Error 404",
+      "expectedHttp": 404,
+      "route": "/resources/php/error.php?code=404",
+      "finalPath": "/resources/php/error.php",
+      "http": 404,
+      "failures": []
+    },
+    {
+      "name": "error-500",
+      "title": "Error 500",
+      "expectedHttp": 500,
+      "route": "/resources/php/error.php?code=500",
+      "finalPath": "/resources/php/error.php",
+      "http": 500,
+      "failures": []
+    },
+    {
+      "name": "error-503",
+      "title": "Error 503",
+      "expectedHttp": 503,
+      "route": "/resources/php/error.php?code=503",
+      "finalPath": "/resources/php/error.php",
+      "http": 503,
+      "failures": []
+    },
+    {
+      "name": "dealer-catalog",
+      "title": "Spare parts catalog",
+      "expectedHttp": 200,
+      "route": "/page/Dealer/viewSparePart.php",
+      "finalPath": "/page/Dealer/viewSparePart.php",
+      "http": 200,
+      "failures": []
+    },
+    {
+      "name": "dealer-part",
+      "title": "Part details",
+      "expectedHttp": 200,
+      "route": "/page/Dealer/sparePart-template.html?id=1",
+      "finalPath": "/page/Dealer/sparePart-template.html",
+      "http": 200,
+      "failures": []
+    },
+    {
+      "name": "dealer-cart",
+      "title": "Shopping cart",
+      "expectedHttp": 200,
+      "route": "/page/Dealer/shoppingCart.php",
+      "finalPath": "/page/Dealer/shoppingCart.php",
+      "http": 200,
+      "failures": []
+    },
+    {
+      "name": "dealer-orders",
+      "title": "Order history",
+      "expectedHttp": 200,
+      "route": "/page/Dealer/viewOrderRecord.html",
+      "finalPath": "/page/Dealer/viewOrderRecord.html",
+      "http": 200,
+      "failures": []
+    },
+    {
+      "name": "dealer-order",
+      "title": "Order details",
+      "expectedHttp": 200,
+      "route": "/page/Dealer/OrderDetails.html?id=1",
+      "finalPath": "/page/Dealer/OrderDetails.html",
+      "http": 200,
+      "failures": []
+    },
+    {
+      "name": "dealer-profile",
+      "title": "Profile",
+      "expectedHttp": 200,
+      "route": "/page/Dealer/profile.html",
+      "finalPath": "/page/Dealer/profile.html",
+      "http": 200,
+      "failures": []
+    },
+    {
+      "name": "dealer-profile-settings",
+      "title": "Profile settings",
+      "expectedHttp": 200,
+      "route": "/page/Dealer/profileSetting.html",
+      "finalPath": "/page/Dealer/profileSetting.html",
+      "http": 200,
+      "failures": []
+    },
+    {
+      "name": "staff-orders",
+      "title": "Staff orders",
+      "expectedHttp": 200,
+      "route": "/page/Staff/order.html",
+      "finalPath": "/page/Staff/order.html",
+      "http": 200,
+      "failures": []
+    },
+    {
+      "name": "staff-order",
+      "title": "Staff order details",
+      "expectedHttp": 200,
+      "route": "/page/Staff/orderinfo.html?OrderId=1",
+      "finalPath": "/page/Staff/orderinfo.html",
+      "http": 200,
+      "failures": []
+    },
+    {
+      "name": "staff-items",
+      "title": "Catalog management",
+      "expectedHttp": 200,
+      "route": "/page/Staff/Item.html",
+      "finalPath": "/page/Staff/Item.html",
+      "http": 200,
+      "failures": []
+    },
+    {
+      "name": "staff-add-item",
+      "title": "Add item",
+      "expectedHttp": 200,
+      "route": "/page/Staff/addItem.html",
+      "finalPath": "/page/Staff/addItem.html",
+      "http": 200,
+      "failures": []
+    },
+    {
+      "name": "staff-edit-item",
+      "title": "Edit item",
+      "expectedHttp": 200,
+      "route": "/page/Staff/editItem.html?id=1",
+      "finalPath": "/page/Staff/editItem.html",
+      "http": 200,
+      "failures": []
+    },
+    {
+      "name": "staff-report",
+      "title": "Reports",
+      "expectedHttp": 200,
+      "route": "/page/Staff/genreport.html",
+      "finalPath": "/page/Staff/genreport.html",
+      "http": 200,
+      "failures": []
+    },
+    {
+      "name": "logout",
+      "title": "Sign out",
+      "expectedHttp": 200,
+      "route": "/logout.php",
+      "finalPath": "/logout.php",
+      "http": 200,
+      "failures": []
+    },
+    {
+      "name": "logout-static",
+      "title": "Signed out",
+      "expectedHttp": 200,
+      "route": "/logout.html",
+      "finalPath": "/index.php",
+      "http": 200,
+      "failures": []
+    },
+    {
+      "name": "staff-product-locked",
+      "title": "Product deletion blocked by order history",
+      "route": "/page/Staff/Item.html",
+      "http": 200,
+      "failures": [],
+      "capturedAt": "2026-11-11T23:12:21.146702+00:00"
+    },
+    {
+      "name": "staff-catalog-filtered",
+      "title": "Catalog search and combined filters",
+      "route": "/page/Staff/Item.html",
+      "http": 200,
+      "failures": [],
+      "capturedAt": "2026-11-11T23:12:21.146702+00:00"
+    },
+    {
+      "name": "staff-items-dark",
+      "title": "Catalog management \u2014 dark theme",
+      "route": "/page/Staff/Item.html",
+      "http": 200,
+      "failures": [],
+      "capturedAt": "2026-11-11T23:12:21.146702+00:00"
+    },
+    {
+      "name": "staff-orders-mobile",
+      "title": "Staff orders \u2014 mobile",
+      "route": "/page/Staff/order.html",
+      "http": 200,
+      "failures": [],
+      "capturedAt": "2026-11-11T23:12:21.146702+00:00",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      }
+    },
+    {
+      "name": "staff-items-mobile",
+      "title": "Catalog management \u2014 mobile",
+      "route": "/page/Staff/Item.html",
+      "http": 200,
+      "failures": [],
+      "capturedAt": "2026-11-11T23:12:21.146702+00:00",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      }
+    },
+    {
+      "name": "staff-order-mobile",
+      "title": "Staff order details \u2014 mobile",
+      "route": "/page/Staff/orderinfo.html?OrderId=1",
+      "http": 200,
+      "failures": [],
+      "capturedAt": "2026-11-11T23:12:21.146702+00:00",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      }
+    },
+    {
+      "name": "staff-add-item-mobile",
+      "title": "Add product \u2014 mobile",
+      "route": "/page/Staff/addItem.html",
+      "http": 200,
+      "failures": [],
+      "capturedAt": "2026-11-11T23:12:21.146702+00:00",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      }
+    },
+    {
+      "name": "staff-edit-item-mobile",
+      "title": "Edit product \u2014 mobile",
+      "route": "/page/Staff/editItem.html?id=1",
+      "http": 200,
+      "failures": [],
+      "capturedAt": "2026-11-11T23:12:21.146702+00:00",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      }
+    },
+    {
+      "name": "staff-report-mobile",
+      "title": "Reports \u2014 mobile",
+      "route": "/page/Staff/genreport.html",
+      "http": 200,
+      "failures": [],
+      "capturedAt": "2026-11-11T23:12:21.146702+00:00",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      }
+    }
+  ]
+}

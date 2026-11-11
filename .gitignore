@@ -1,0 +1,71 @@
+# IDE
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+!.vscode/*.code-snippets
+.history/
+*.vsix
+.idea/**/*
+out/
+cmake-build-*/
+
+# Dependencies
+/vendor/
+/node_modules/
+composer.lock
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
+
+# Env & Secrets
+.env*
+!.env.example
+
+# Logs & Cache
+*.log
+logs/
+tmp/
+.cache/
+.php-cs-fixer.cache
+.phpstan.cache
+.phpunit.result.cache
+resources/py/__pycache__/
+
+resources/docker/mariadb/data/
+resources/docker/*/data/
+docker-volumes/
+
+# Build
+/build/
+/dist/
+/coverage/
+
+# OS
+.DS_Store
+Thumbs.db
+apps/web/node_modules
+apps/web/.svelte-kit
+apps/web/.npm-cache
+.phpunit.cache
+apps/api/storage/cache/
+apps/api/storage/proxies/
+# Application dependency lockfile is part of reproducible PHP builds.
+!/composer.lock
+
+# Isolated portal style and screenshot tooling
+/resources/styles/node_modules/
+/scripts/demo/node_modules/
+
+# Reproducible tooling locks
+!/resources/styles/package-lock.json
+!/scripts/demo/package-lock.json
+
+# Local agent and IDE state
+/.idea/
+/.claude/
+/tests/reports/*.xml
+/tests/reports/*.html
+/tests/reports/*.txt
+!/apps/web/package-lock.json

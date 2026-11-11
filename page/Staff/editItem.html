@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Edit item | SLMC Portal</title>
+    <meta name="description" content="Update spare-part pricing, stock, and details.">
+    <meta name="robots" content="noindex, nofollow">
+    <meta name="application-name" content="SLMC Portal">
+    <meta name="theme-color" content="#f8fafc" media="(prefers-color-scheme: light)">
+    <meta name="theme-color" content="#020617" media="(prefers-color-scheme: dark)">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="SLMC Portal">
+    <meta property="og:title" content="Edit item | SLMC Portal">
+    <meta property="og:description" content="Update spare-part pricing, stock, and details.">
+    <meta property="og:image" content="/resources/image/SLMC_Icon.png">
+    <link rel="icon" href="/resources/image/SLMC_Icon.png" type="image/png" media="(prefers-color-scheme: light)">
+    <link rel="icon" href="/resources/image/SLMC_Icon_DM.png" type="image/png" media="(prefers-color-scheme: dark)">
+    <link rel="apple-touch-icon" href="/resources/image/SLMC_Icon.png">
+    <script src="/resources/js/theme.global.js"></script>
+
+    <script src="/resources/js/auth-session.global.js"></script>
+
+
+
+    <script type="module" src="../../resources/js/script.js"></script>
+    <link rel="stylesheet" href="/resources/css/portal.css">
+    <script src="../../resources/js/module/config/endpoints.global.js"></script>
+
+
+<link rel="stylesheet" href="/resources/css/staff.css">
+<script src="/resources/js/staff-shell.global.js" defer></script>
+</head>
+<body class="portal-page staff-page" data-staff-page="catalog">
+<a class="staff-skip" href="#staffMain">Skip to content</a>
+<aside class="staff-sidebar" id="staffSidebar" aria-label="Staff workspace">
+ <a class="staff-brand" href="order.html"><img src="/resources/image/SLMC_Icon.png" alt=""><span>SLMC<small>Staff workspace</small></span></a>
+ <p class="staff-nav-label">Workspace</p><nav aria-label="Staff navigation"><a href="order.html" ><span class="staff-nav-symbol" aria-hidden="true">≡</span>Orders</a><a href="Item.html" aria-current="page"><span class="staff-nav-symbol" aria-hidden="true">□</span>Catalog</a><a href="genreport.html" ><span class="staff-nav-symbol" aria-hidden="true">↗</span>Reports</a></nav>
+ <div class="staff-sidebar-bottom"><span class="staff-avatar" aria-hidden="true">S</span><div>Staff portal<small>Sales management</small></div><a href="/logout.php" aria-label="Sign out" title="Sign out">↗</a></div>
+</aside>
+<div class="staff-workspace">
+ <header class="staff-header"><div class="staff-header-location"><button type="button" id="mobileMenuButton" aria-label="Open navigation" aria-expanded="false" aria-controls="mobileMenu">☰</button><span>Workspace</span><span aria-hidden="true">/</span><strong>Edit product</strong></div><div class="staff-header-actions"><span class="staff-role">Sales manager</span><button type="button" id="darkModeToggle" aria-label="Toggle theme">◐</button><a href="/logout.php">Sign out</a></div></header>
+ <nav id="mobileMenu" aria-label="Mobile staff navigation" hidden><a href="order.html" ><span class="staff-nav-symbol" aria-hidden="true">≡</span>Orders</a><a href="Item.html" aria-current="page"><span class="staff-nav-symbol" aria-hidden="true">□</span>Catalog</a><a href="genreport.html" ><span class="staff-nav-symbol" aria-hidden="true">↗</span>Reports</a></nav>
+ <main id="staffMain" class="staff-main" tabindex="-1"><div class="staff-page-heading"><p>SLMC OPERATIONS</p><h1>Edit product</h1><div>Update stock, price and product details.</div></div><div class="staff-content">
+      <h2
+        class="text-3xl md:text-4xl font-bold text-center text-blue-600 dark:text-blue-400 mb-8 mt-8"
+      >
+        Edit Item
+      </h2>
+      <div
+        class="max-w-4xl mx-auto bg-gray-100 dark:bg-gray-800 rounded-lg shadow-lg p-6 md:p-8"
+      >
+        <form id="editItemForm" class="space-y-6">
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div class="space-y-2">
+              <label class="block text-sm font-medium">Spare part number</label>
+              <p
+                id="sparePartNumber"
+                class="text-lg font-semibold text-blue-600 dark:text-blue-400"
+              ></p>
+            </div>
+            <div class="space-y-2">
+              <label class="block text-sm font-medium"
+                >Spare part category</label
+              >
+              <p id="sparePartCategory" class="text-lg"></p>
+            </div>
+            <div class="space-y-2">
+              <label class="block text-sm font-medium">Spare part name</label>
+              <p id="sparePartName" class="text-lg"></p>
+            </div>
+            <div class="space-y-2">
+              <label for="file" class="block text-sm font-medium"
+                >Upload spare part image</label
+              >
+              <input
+                type="file"
+                id="file"
+                name="img"
+                accept="image/*"
+                class="w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
+              />
+            </div>
+            <div class="space-y-2">
+              <label class="block text-sm font-medium">Weight</label>
+              <p id="sparePartWeight" class="text-lg"></p>
+            </div>
+            <div class="space-y-2">
+              <label
+                for="input-stock-quantity"
+                class="block text-sm font-medium"
+                >Stock item quantity</label
+              >
+              <input min="0" step="1"
+                type="number"
+                id="input-stock-quantity"
+                placeholder="Enter stock item quantity"
+                required
+                class="w-full px-3 py-2 text-gray-700 bg-white dark:bg-gray-700 dark:text-gray-200 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400"
+              />
+            </div>
+            <div class="space-y-2">
+              <label for="input-price" class="block text-sm font-medium"
+                >Price</label
+              >
+              <input min="0" step="0.01"
+                type="number"
+                id="input-price"
+                placeholder="Enter price"
+                required
+                class="w-full px-3 py-2 text-gray-700 bg-white dark:bg-gray-700 dark:text-gray-200 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400"
+              />
+            </div>
+          </div>
+          <div class="space-y-2">
+            <label for="description" class="block text-sm font-medium"
+              >Spare part description</label
+            >
+            <textarea
+              id="description"
+              name="description"
+              rows="4"
+              placeholder="Enter spare part description"
+              class="w-full px-3 py-2 text-gray-700 bg-white dark:bg-gray-700 dark:text-gray-200 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400"
+            ></textarea>
+          </div>
+          <div
+            class="flex flex-col sm:flex-row sm:justify-end space-y-4 sm:space-y-0 sm:space-x-4"
+          >
+            <button
+              type="submit"
+              class="w-full sm:w-auto px-6 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 dark:bg-blue-500 dark:hover:bg-blue-600 dark:focus:ring-offset-gray-800 transition-colors duration-200"
+            >
+              Edit
+            </button>
+            <button
+              type="button"
+              onclick="location.href='Item.html'"
+              class="w-full sm:w-auto px-6 py-2 bg-gray-300 text-gray-700 rounded-md hover:bg-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 dark:bg-gray-600 dark:text-gray-200 dark:hover:bg-gray-500 dark:focus:ring-offset-gray-800 transition-colors duration-200"
+            >
+              Cancel
+            </button>
+          </div>
+        </form>
+      </div>
+      <!-- Footer -->
+
+    </div></main>
+ <footer class="staff-footer">Smart &amp; Luxury Motor Company <span>Staff workspace</span></footer>
+</div>
+<script>
+        window.addEventListener('DOMContentLoaded', () => {
+            const mobileMenuButton = document.getElementById('mobileMenuButton');
+            const mobileMenu = document.getElementById('mobileMenu');
+            mobileMenuButton.addEventListener('click', () => {
+                mobileMenu.style.display = mobileMenu.style.display === 'none' ? 'block' : 'none';
+            });
+        });
+    </script>
+<script src="../../resources/js/ManageItem.js"></script>
+<script>
+function fetchAPIForEdit(id) {
+    const manageItemApi = window.APP_API_ENDPOINTS?.manageItem;
+    if (!manageItemApi) {
+        throw new Error("Missing APP_API_ENDPOINTS.manageItem");
+    }
+    const apiUrl = `${manageItemApi}?action=get&id=${encodeURIComponent(id)}`;
+    const AuthToken = window.SLMC_AUTH.getToken();
+
+    return fetch(apiUrl, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${AuthToken}`
+        },
+        credentials: 'include'
+    })
+    .then(response => response.json())
+    .then(result => {
+        if (result.status === 'success') {
+            return result.data;
+        } else {
+            throw new Error(result.message || 'Failed to fetch spare part data');
+        }
+    });
+}
+
+function fetchItemData() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const id = urlParams.get('id');
+
+    if (!id) {
+        alert('No item ID provided');
+        return;
+    }
+
+    fetchAPIForEdit(id)
+        .then(itemData => {
+            document.getElementById("sparePartNumber").textContent = itemData.sparePartNum;
+            document.getElementById("sparePartCategory").textContent = itemData.sparePartCategory;
+            document.getElementById("sparePartName").textContent = itemData.sparePartName;
+            document.getElementById("sparePartWeight").textContent = itemData.weight;
+            document.getElementById("input-stock-quantity").value = itemData.stockItemQty;
+            document.getElementById("input-price").value = itemData.price;
+            document.getElementById("description").value = itemData.sparePartDescription;
+        })
+        .catch(error => {
+            console.error('Error fetching item data:', error);
+            alert('Error fetching item data: ' + error.message);
+        });
+}
+
+function updateItem() {
+    const id = document.getElementById("sparePartNumber").textContent;
+    const formData = new FormData();
+
+    formData.append("id", id);
+    formData.append("stockItemQty", document.getElementById("input-stock-quantity").value);
+    formData.append("price", document.getElementById("input-price").value);
+    formData.append("sparePartDescription", document.getElementById("description").value);
+
+    const fileInput = document.getElementById("file");
+    if (fileInput.files.length > 0) {
+        formData.append("image", fileInput.files[0]);
+    }
+
+    const AuthToken = window.SLMC_AUTH.getToken();
+
+    const manageItemApi = window.APP_API_ENDPOINTS?.manageItem;
+    if (!manageItemApi) {
+        throw new Error("Missing APP_API_ENDPOINTS.manageItem");
+    }
+    fetch(`${manageItemApi}?action=update`, {
+        method: 'POST',
+        headers: {
+            'Authorization': `Bearer ${AuthToken}`
+        },
+        body: formData,
+        credentials: 'include'
+    })
+    .then(response => response.json())
+    .then(result => {
+        if (result.status === 'success') {
+            alert('Item updated successfully!');
+            window.location.href = 'Item.html';
+        } else {
+            throw new Error(result.message || 'Failed to update item');
+        }
+    })
+    .catch(error => {
+        console.error('Error updating item:', error);
+        alert('Error updating item: ' + error.message);
+    });
+}
+
+
+
+document.addEventListener("DOMContentLoaded", function () {
+    // Fetch item data
+    fetchItemData();
+
+    // Handle form submission
+    document
+        .getElementById("editItemForm")
+        .addEventListener("submit", function (e) {
+            e.preventDefault();
+            updateItem();
+        });
+});
+</script>
+</body>
+</html>

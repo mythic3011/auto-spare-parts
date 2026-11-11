@@ -1,0 +1,271 @@
+<!doctype html>
+<html class="dark" lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Reports | SLMC Portal</title>
+    <meta name="description" content="Review SLMC stock and sales reports.">
+    <meta name="robots" content="noindex, nofollow">
+    <meta name="application-name" content="SLMC Portal">
+    <meta name="theme-color" content="#f8fafc" media="(prefers-color-scheme: light)">
+    <meta name="theme-color" content="#020617" media="(prefers-color-scheme: dark)">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="SLMC Portal">
+    <meta property="og:title" content="Reports | SLMC Portal">
+    <meta property="og:description" content="Review SLMC stock and sales reports.">
+    <meta property="og:image" content="/resources/image/SLMC_Icon.png">
+    <link rel="icon" href="/resources/image/SLMC_Icon.png" type="image/png" media="(prefers-color-scheme: light)">
+    <link rel="icon" href="/resources/image/SLMC_Icon_DM.png" type="image/png" media="(prefers-color-scheme: dark)">
+    <link rel="apple-touch-icon" href="/resources/image/SLMC_Icon.png">
+    <script src="/resources/js/theme.global.js"></script>
+
+    <script src="/resources/js/auth-session.global.js"></script>
+
+
+
+
+    <script type="module" src="../../resources/js/script.js"></script>
+    <script src="../../resources/js/module/config/endpoints.global.js"></script>
+    <link rel="stylesheet" href="/resources/css/portal.css">
+
+
+<link rel="stylesheet" href="/resources/css/staff.css">
+<script src="/resources/js/staff-shell.global.js" defer></script>
+<script src="/resources/js/staff-filters.js" defer></script>
+</head>
+<body class="portal-page staff-page" data-staff-page="reports">
+<a class="staff-skip" href="#staffMain">Skip to content</a>
+<aside class="staff-sidebar" id="staffSidebar" aria-label="Staff workspace">
+ <a class="staff-brand" href="order.html"><img src="/resources/image/SLMC_Icon.png" alt=""><span>SLMC<small>Staff workspace</small></span></a>
+ <p class="staff-nav-label">Workspace</p><nav aria-label="Staff navigation"><a href="order.html" ><span class="staff-nav-symbol" aria-hidden="true">≡</span>Orders</a><a href="Item.html" ><span class="staff-nav-symbol" aria-hidden="true">□</span>Catalog</a><a href="genreport.html" aria-current="page"><span class="staff-nav-symbol" aria-hidden="true">↗</span>Reports</a></nav>
+ <div class="staff-sidebar-bottom"><span class="staff-avatar" aria-hidden="true">S</span><div>Staff portal<small>Sales management</small></div><a href="/logout.php" aria-label="Sign out" title="Sign out">↗</a></div>
+</aside>
+<div class="staff-workspace">
+ <header class="staff-header"><div class="staff-header-location"><button type="button" id="mobileMenuButton" aria-label="Open navigation" aria-expanded="false" aria-controls="mobileMenu">☰</button><span>Workspace</span><span aria-hidden="true">/</span><strong>Reports</strong></div><div class="staff-header-actions"><span class="staff-role">Sales manager</span><button type="button" id="darkModeToggle" aria-label="Toggle theme">◐</button><a href="/logout.php">Sign out</a></div></header>
+ <nav id="mobileMenu" aria-label="Mobile staff navigation" hidden><a href="order.html" ><span class="staff-nav-symbol" aria-hidden="true">≡</span>Orders</a><a href="Item.html" ><span class="staff-nav-symbol" aria-hidden="true">□</span>Catalog</a><a href="genreport.html" aria-current="page"><span class="staff-nav-symbol" aria-hidden="true">↗</span>Reports</a></nav>
+ <main id="staffMain" class="staff-main" tabindex="-1"><div class="staff-page-heading"><p>SLMC OPERATIONS</p><h1>Reports</h1><div>Review stock and export your operational reports.</div></div><div class="staff-content">
+    <div class="staff-section">
+        <h1 class="text-2xl sm:text-3xl font-bold mb-4">Stock Report</h1>
+        <h2 id="total" class="text-lg sm:text-xl mb-4"></h2>
+
+        <div class="flex flex-wrap gap-2 mb-4">
+            <button onclick="printReport()" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded text-sm">
+                Print
+            </button>
+            <button onclick="saveAsPDF()" class="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded text-sm">
+                Save PDF
+            </button>
+            <button onclick="exportToCSV()" class="bg-yellow-500 hover:bg-yellow-600 text-white font-bold py-2 px-4 rounded text-sm">
+                Export CSV
+            </button>
+        </div>
+
+        <div class="overflow-x-auto shadow-md sm:rounded-lg">
+            <div class="staff-table-scroll" tabindex="0" role="region" aria-label="Scrollable data table"><table id="reportTable" class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
+                <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                <tr>
+                    <th scope="col" class="px-4 py-3">Part number</th>
+                    <th scope="col" class="px-4 py-3">Part name</th>
+                    <th scope="col" class="px-4 py-3">Part Image</th>
+                    <th scope="col" class="px-4 py-3">Order number</th>
+                    <th scope="col" class="px-4 py-3">Order quantity</th>
+                    <th scope="col" class="px-4 py-3">Total sales amount</th>
+                </tr>
+                </thead>
+                <tbody id="reportTableBody">
+                <!-- Table rows will be inserted here dynamically by JavaScript -->
+                </tbody>
+            </table></div>
+        </div>
+
+        <div class="mt-4 sm:mt-6">
+            <button onclick="location.href='order.html'" class="w-full sm:w-auto bg-indigo-500 hover:bg-indigo-600 text-white font-bold py-3 px-6 rounded text-sm">
+                Finish
+            </button>
+        </div>
+        <!-- Footer -->
+
+    </div>
+</div></main>
+ <footer class="staff-footer">Smart &amp; Luxury Motor Company <span>Staff workspace</span></footer>
+</div>
+<script>
+    function showTableError(bodyId, error) {
+        const tableBody = document.getElementById(bodyId);
+        if (!tableBody) {
+            return;
+        }
+        tableBody.replaceChildren();
+        const row = document.createElement('tr');
+        const cell = document.createElement('td');
+        cell.colSpan = 11;
+        cell.className = 'text-center text-red-500';
+        cell.textContent = `Error loading orders: ${error && error.message ? error.message : 'Request failed'}`;
+        row.appendChild(cell);
+        tableBody.appendChild(row);
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+        fetchReportData();
+    });
+
+    function fetchReportData() {
+        const reportApi = window.APP_API_ENDPOINTS?.report;
+        if (!reportApi) {
+            throw new Error("Missing APP_API_ENDPOINTS.report");
+        }
+        const apiUrl = `${reportApi}?action=getStockReport`;
+
+            fetch(apiUrl, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                credentials: 'include'
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.status === 'success' && data.data) {
+                        renderReportTable(data.data);
+                    } else {
+                        throw new Error(data.message || 'Failed to fetch order item list');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error generate report:', error);
+                    showTableError('orderTableBody', error);
+                });
+    }
+
+
+    function updateTotal(count) {
+        const totalElement = document.getElementById('total');
+        if (totalElement) {
+            totalElement.textContent = `Total: ${count} Orders`;
+            totalElement.className = 'text-lg font-bold mb-4 text-gray-800 dark:text-white';
+        }
+    }
+
+    function renderReportTable(data) {
+        const tableBody = document.getElementById('reportTableBody');
+        if (!tableBody) {
+            console.error('Table body element not found');
+            return;
+        }
+        tableBody.textContent = ''; // Clear existing content
+
+        data.forEach((item, index) => {
+            const row = document.createElement('tr');
+            row.dataset.sales = String(Number(item.totalSalesAmount) || 0);
+            row.dataset.search = [item.partNumber, item.partName, item.orderNumbers].join(' ');
+            row.className = index % 2 === 0
+                ? 'bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700'
+                : 'bg-gray-50 dark:bg-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600';
+
+            const cellContents = [
+                item.partNumber,
+                item.partName,
+                createImageElement(item.partImage, item.partName),
+                createMultilineContent(item.orderNumbers),
+                createMultilineContent(item.orderQuantities),
+                `${item.totalSalesAmount} HKD`
+            ];
+
+            cellContents.forEach((content, cellIndex) => {
+                const cell = document.createElement('td');
+                cell.className = 'px-4 py-3 text-sm text-gray-900 dark:text-gray-200';
+
+                if (cellIndex === 0) {
+                    cell.className += ' font-medium';
+                }
+
+                if (typeof content === 'string') {
+                    cell.textContent = content;
+                } else {
+                    cell.appendChild(content);
+                }
+                row.appendChild(cell);
+            });
+
+            tableBody.appendChild(row);
+        });
+    }
+
+    function createImageElement(src, alt) {
+        const img = document.createElement('img');
+        img.src = src;
+        img.alt = alt;
+        img.className = 'h-10 w-10 rounded-full object-cover';
+        return img;
+    }
+
+    function createMultilineContent(itemsString) {
+        const items = itemsString.split(',').map(item => item.trim());
+        const fragment = document.createDocumentFragment();
+        items.forEach((item, index) => {
+            if (index > 0) {
+                fragment.appendChild(document.createElement('br'));
+            }
+            const span = document.createElement('span');
+            span.textContent = item;
+            span.className = 'block text-sm text-gray-700 dark:text-gray-300';
+            fragment.appendChild(span);
+        });
+        return fragment;
+    }
+
+    function displayErrorMessage(message) {
+        const errorDiv = document.createElement('div');
+        errorDiv.textContent = message;
+        errorDiv.className = 'bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4 dark:bg-red-900 dark:border-red-700 dark:text-red-100';
+
+        const closeButton = document.createElement('button');
+        closeButton.textContent = '×';
+        closeButton.className = 'absolute top-0 right-0 px-4 py-3';
+        closeButton.onclick = function() {
+            errorDiv.remove();
+        };
+
+        errorDiv.appendChild(closeButton);
+        document.body.insertBefore(errorDiv, document.body.firstChild);
+    }
+
+    function printReport() {
+        window.print();
+    }
+
+    function saveAsPDF() {
+        // Open the print dialog and select 'Save as PDF' as the printer
+        window.print();
+    }
+
+    function exportToCSV() {
+        const table = document.getElementById('reportTable');
+        if (!table) {
+            console.error('Report table not found');
+            return;
+        }
+
+        const csv = [];
+        for (let i = 0; i < table.rows.length; i++) {
+            const row = [];
+            if (table.rows[i].hidden) continue;
+            const cols = table.rows[i].cells;
+            for (let j = 0; j < cols.length; j++) {
+                row.push(cols[j].textContent.replace(/,/g, ';')); // Replace commas with semicolons
+            }
+            csv.push(row.join(","));
+        }
+
+        const csvContent = "data:text/csv;charset=utf-8," + encodeURIComponent(csv.join("\n"));
+        const link = document.createElement("a");
+        link.setAttribute("href", csvContent);
+        link.setAttribute("download", "report.csv");
+        link.style.display = 'none';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    }
+</script>
+</body>
+</html>

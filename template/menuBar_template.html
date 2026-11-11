@@ -1,0 +1,89 @@
+<!-- For Copy and Paste-->
+
+<!doctype html>
+<html lang="en">
+<head>
+    <meta content="text/html; charset=utf-8" hstadium_imgp-equiv="Content-Type"/>
+    <title>Menu_Template</title>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <meta content="ie=edge" http-equiv="X-UA-Compatible">
+    <meta content="Dashboard" name="description">
+    <meta content="dashboard, page" name="keywords">
+    <meta content="noindex, nofollow" name="robots">
+    <link href="../resources/image/SLMC_Icon.jpg" rel="icon" type="image/png"/>
+    <link href="menuBar_template.css" rel="stylesheet"/>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,typography,aspect-ratio,line-clamp,container-queries
+"></script>
+    <script>
+        function show() {   //show the hidden menu
+            document.getElementById('hidden_menu').style.display = 'block';
+            document.getElementById('body').style.overflow = 'hidden'; //disable scrolling so the index page will not be scrolled when the hidden menu shown
+        }
+
+        function hide() {   //hide the hidden menu
+            document.getElementById('hidden_menu').style.display = 'none';
+            document.getElementById('body').style.overflow = 'auto'; //allow scrolling so the index page can be scrolled after the hidden menu is hide
+        }
+    </script>
+</head>
+<body>
+<!--------------------Menu-------------------->
+<div class="menu">
+    <div class="menu_left">
+        <img src="../resources/image/SLMC_LOGO.png">
+    </div>
+    <div class="menu_center">
+        <div class="menu_tag"><span class="word"><a href="#">Order Record</a></span></div>
+        <div class="menu_tag"><span class="word"><a href="#">Spare Part</a></span></div>
+        <div class="menu_tag"><span class="word"><a href="#">Cart</a></span></div>
+        <div class="menu_tag"><span class="word"><a href="#">Profile</a></span></div>
+    </div>
+    <div class="menu_right">
+        <div class="menu_tag"><span class="word"><a href="#">Log Out</a></span></div>
+    </div>
+    <img class="hidden_menu_icon" onclick="show()" src="../resources/image/menu.png">
+</div>
+
+<div class="hidden_menu" id="hidden_menu">
+    <div class="hidden_menu_body">
+        <div class="hidden_menu_body_top">
+            <img class="hidden_menu_logo" src="./Images/SLMC LOGO.png">
+            <img class="hidden_menu_x_icon" onclick="hide()" src="../resources/image/close_black.png">
+        </div>
+        <div class="hidden_menu_body_main">
+            <div class="hidden_menu_tag">
+                <a href="#">Order Record</a>
+            </div>
+            <div class="hidden_menu_tag">
+                <a href="#">Spare Part</a>
+            </div>
+            <div class="hidden_menu_tag">
+                <a href="#">Cart</a>
+            </div>
+            <div class="hidden_menu_tag">
+                <a href="#">Profile</a>
+            </div>
+            <div class="hidden_menu_tag hidden_menu_tag_last">
+                <a href="#">Log Out</a>
+            </div>
+        </div>
+    </div>
+</div>
+<!--------------------Menu-------------------->
+
+
+<footer style="display: none;">
+    <div class="w-full bg-gray-900 text-gray-500 px-10">
+        <div class="container mx-auto px-4 py-6 text-center">
+            <p id="copyright">
+                Copyright © 2024
+                <a href="../index.php" target="_blank"
+                >Smart & Luxury Motor Company</a
+                >
+                All Rights Reserved.
+            </p>
+        </div>
+    </div>
+</footer>
+</body>
+</html>

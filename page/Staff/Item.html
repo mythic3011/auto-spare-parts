@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Catalog management | SLMC Portal</title>
+    <meta name="description" content="Manage the SLMC spare-parts catalog and stock.">
+    <meta name="robots" content="noindex, nofollow">
+    <meta name="application-name" content="SLMC Portal">
+    <meta name="theme-color" content="#f8fafc" media="(prefers-color-scheme: light)">
+    <meta name="theme-color" content="#020617" media="(prefers-color-scheme: dark)">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="SLMC Portal">
+    <meta property="og:title" content="Catalog management | SLMC Portal">
+    <meta property="og:description" content="Manage the SLMC spare-parts catalog and stock.">
+    <meta property="og:image" content="/resources/image/SLMC_Icon.png">
+    <link rel="icon" href="/resources/image/SLMC_Icon.png" type="image/png" media="(prefers-color-scheme: light)">
+    <link rel="icon" href="/resources/image/SLMC_Icon_DM.png" type="image/png" media="(prefers-color-scheme: dark)">
+    <link rel="apple-touch-icon" href="/resources/image/SLMC_Icon.png">
+    <script src="/resources/js/theme.global.js"></script>
+
+    <script src="/resources/js/auth-session.global.js"></script>
+
+
+
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="/resources/css/portal.css">
+    <script type="module" src="../../resources/js/script.js"></script>
+    <script src="../../resources/js/module/config/endpoints.global.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <script>
+        function loadNumOfItem(){
+            const manageItemApi = window.APP_API_ENDPOINTS?.manageItem;
+            if (!manageItemApi) {
+                throw new Error("Missing APP_API_ENDPOINTS.manageItem");
+            }
+            $.ajax({
+                url: `${manageItemApi}?act=listTotal`,
+                type: 'GET',
+                dataType: 'json',
+                success: function(data){
+                    document.getElementById('total-items').textContent = "Total: " + data.total + " Items";
+                }
+            });
+        };
+
+    </script>
+
+<link rel="stylesheet" href="/resources/css/staff.css">
+<script src="/resources/js/staff-shell.global.js" defer></script>
+<script src="/resources/js/staff-filters.js" defer></script>
+</head>
+<body class="portal-page staff-page" data-staff-page="catalog">
+<a class="staff-skip" href="#staffMain">Skip to content</a>
+<aside class="staff-sidebar" id="staffSidebar" aria-label="Staff workspace">
+ <a class="staff-brand" href="order.html"><img src="/resources/image/SLMC_Icon.png" alt=""><span>SLMC<small>Staff workspace</small></span></a>
+ <p class="staff-nav-label">Workspace</p><nav aria-label="Staff navigation"><a href="order.html" ><span class="staff-nav-symbol" aria-hidden="true">≡</span>Orders</a><a href="Item.html" aria-current="page"><span class="staff-nav-symbol" aria-hidden="true">□</span>Catalog</a><a href="genreport.html" ><span class="staff-nav-symbol" aria-hidden="true">↗</span>Reports</a></nav>
+ <div class="staff-sidebar-bottom"><span class="staff-avatar" aria-hidden="true">S</span><div>Staff portal<small>Sales management</small></div><a href="/logout.php" aria-label="Sign out" title="Sign out">↗</a></div>
+</aside>
+<div class="staff-workspace">
+ <header class="staff-header"><div class="staff-header-location"><button type="button" id="mobileMenuButton" aria-label="Open navigation" aria-expanded="false" aria-controls="mobileMenu">☰</button><span>Workspace</span><span aria-hidden="true">/</span><strong>Catalog</strong></div><div class="staff-header-actions"><span class="staff-role">Sales manager</span><button type="button" id="darkModeToggle" aria-label="Toggle theme">◐</button><a href="/logout.php">Sign out</a></div></header>
+ <nav id="mobileMenu" aria-label="Mobile staff navigation" hidden><a href="order.html" ><span class="staff-nav-symbol" aria-hidden="true">≡</span>Orders</a><a href="Item.html" aria-current="page"><span class="staff-nav-symbol" aria-hidden="true">□</span>Catalog</a><a href="genreport.html" ><span class="staff-nav-symbol" aria-hidden="true">↗</span>Reports</a></nav>
+ <main id="staffMain" class="staff-main" tabindex="-1"><div class="staff-page-heading"><p>SLMC OPERATIONS</p><h1>Catalog</h1><div>Manage stock, pricing and product availability.</div></div><div class="staff-content">
+    <section class="staff-section">
+        <h1 class="text-3xl font-bold mb-4">Current On Sale Items</h1>
+        <h2 id="total-items" class="text-xl mb-4"></h2>
+
+        <div class="flex flex-wrap gap-2 mb-4">
+            <button onclick="itemAction('add')" class="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded">
+                Add New Item
+            </button>
+            <button onclick="itemAction('edit')" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded">
+                Edit Item
+            </button>
+            <button onclick="itemAction('delete')" class="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded">
+                Delete Item
+            </button>
+        </div>
+        <div id="loadingSpinner" class="hidden justify-center items-center my-4">
+            <div class="animate-spin rounded-full h-10 w-10 border-b-2 border-blue-500"></div>
+        </div>
+        <div class="overflow-x-auto shadow-md sm:rounded-lg">
+            <div class="staff-table-scroll" tabindex="0" role="region" aria-label="Scrollable data table"><table id="sparePartsTable" class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
+                <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                <tr>
+                    <th scope="col" class="p-4">
+                        <div class="flex items-center">
+                            <input id="checkbox-all" type="checkbox" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                            <label for="checkbox-all" class="sr-only">checkbox</label>
+                        </div>
+                    </th>
+                    <th scope="col" class="px-6 py-3 cursor-pointer" onclick="sortTable(1)">Part number</th>
+                    <th scope="col" class="px-6 py-3 cursor-pointer" onclick="sortTable(2)">Part category</th>
+                    <th scope="col" class="px-6 py-3 cursor-pointer" onclick="sortTable(3)">Part name</th>
+                    <th scope="col" class="px-6 py-3">Part image</th>
+                    <th scope="col" class="px-6 py-3">Part description</th>
+                    <th scope="col" class="px-6 py-3 cursor-pointer" onclick="sortTable(6)">Weight (KG)</th>
+                    <th scope="col" class="px-6 py-3 cursor-pointer" onclick="sortTable(7)">Stock item Qty</th>
+                    <th scope="col" class="px-6 py-3 cursor-pointer" onclick="sortTable(8)">Part price</th>
+                </tr>
+                </thead>
+                <tbody id="sparePartsTableBody">
+                <!-- Table rows will be inserted here by JavaScript -->
+                </tbody>
+            </table></div>
+        </div>
+    </section>
+<script>
+    function showLoading() {
+        document.getElementById('loadingSpinner').classList.remove('hidden');
+        // Hide the Table
+        document.getElementById('sparePartsTable').classList.add('hidden');
+    }
+
+    function hideLoading() {
+        document.getElementById('loadingSpinner').classList.add('hidden');
+        // Show the Table
+        document.getElementById('sparePartsTable').classList.remove('hidden');
+    }
+
+    function updateTotalItems() {
+        const totalItems = document.getElementById('total-items');
+        if (totalItems) {
+            totalItems.textContent = `Total: ${spareParts.length} Items`;
+        }
+    }
+
+    function itemAction(action) {
+        switch (action) {
+            case 'add':
+                addItem();
+                break;
+            case 'edit':
+                editItem();
+                break;
+            case 'delete':
+                deleteItem();
+                loadNumOfItem();
+                break;
+        }
+
+        console.log(`${action} action triggered`);
+    }
+
+    function sortTable(columnIndex) {
+        // Implement table sorting logic
+        console.log(`Sorting by column ${columnIndex}`);
+    }
+
+    function addItem() {
+        // redirect to addItem.html
+        // find the max id from the table and add 1 to it
+        const maxId = Math.max(...spareParts.map(part => parseInt(part.id)));
+        window.location.href = `AddItem.html?id=${maxId + 1}`;
+
+        console.log('Add item');
+    }
+    function editItem() {
+        console.log('Edit item');
+    }
+    function deleteItem() {
+        console.log('Delete item');
+    }
+</script>
+<!-- <script>
+    document.addEventListener('DOMContentLoaded', function() {
+    console.log("DOM fully loaded");
+    loadAndRenderSpareParts();
+});
+</script> -->
+<script src="../../resources/js/ManageItem.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', initSpareParts);
+    </script>
+
+</div></main>
+ <footer class="staff-footer">Smart &amp; Luxury Motor Company <span>Staff workspace</span></footer>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,8 @@
+User agent: *
+Disallow: /error/
+Disallow: /Resources/php/
+Disallow: /Resources/docker/
+Disallow: /Resources/images/
+
+Allow: /Resources/images/SLMC_icon.png
+Allow: /Resources/images/SLMC_LOGO.png

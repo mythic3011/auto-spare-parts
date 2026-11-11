@@ -1,0 +1,73 @@
+/* Generated output: resources/css/portal.css */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+        :root {
+            color-scheme: light;
+            --color-app-bg: #f8fafc;
+            --color-app-surface: #ffffff;
+            --color-app-surface-soft: #f1f5f9;
+            --color-app-border: #e2e8f0;
+            --color-app-text: #0f172a;
+            --color-app-muted: #475569;
+            --color-brand: #2563eb;
+            --color-brand-strong: #1d4ed8;
+            --color-brand-soft: #dbeafe;
+        }
+
+        :root.dark,
+        :root[data-theme="dark"] {
+            color-scheme: dark;
+            --color-app-bg: #020617;
+            --color-app-surface: #0f172a;
+            --color-app-surface-soft: #1e293b;
+            --color-app-border: #334155;
+            --color-app-text: #f8fafc;
+            --color-app-muted: #cbd5e1;
+            --color-brand: #60a5fa;
+            --color-brand-strong: #93c5fd;
+            --color-brand-soft: #172554;
+        }
+
+
+  html { min-height: 100%; background: var(--color-app-bg); }
+  body, html.dark body { background-color: var(--color-app-bg); color: var(--color-app-text); }
+  input:not([type="checkbox"]):not([type="radio"]):not([type="file"]), select, textarea {
+    border-radius: 0.75rem;
+  }
+  :focus-visible { outline: 2px solid var(--color-brand); outline-offset: 3px; }
+  dialog::backdrop { background: rgb(2 6 23 / 0.65); }
+}
+
+[hidden] { display: none !important; }
+
+/* Login-derived shared treatment for existing dealer and staff layouts. */
+.portal-page {
+  min-height: 100svh;
+  background-image: radial-gradient(ellipse at top left, rgb(37 99 235 / 0.055), transparent 48rem);
+  background-attachment: fixed;
+  -webkit-font-smoothing: antialiased;
+}
+.portal-page :where(h1, h2, h3) { letter-spacing: -0.025em; }
+.portal-page :where(input, select, textarea) { border-color: var(--color-app-border); }
+.portal-page :where(input, select, textarea):focus {
+  border-color: var(--color-brand);
+  box-shadow: 0 0 0 3px rgb(37 99 235 / 0.12);
+}
+.portal-page :where(header, nav).bg-white {
+  background-color: var(--color-app-surface);
+  border-color: var(--color-app-border);
+}
+.portal-page :where(th) { font-size: 0.75rem; font-weight: 600; letter-spacing: 0.04em; }
+.portal-page :where(button, a)[class*="bg-blue-600"],
+.portal-page :where(button, a)[class*="bg-primary-600"] {
+  border-radius: 0.875rem;
+  box-shadow: 0 4px 12px rgb(37 99 235 / 0.13);
+}
+@media (prefers-reduced-motion: no-preference) {
+  .portal-page :where(button, a, input, select, textarea) {
+    transition: color 150ms ease, background-color 150ms ease, border-color 150ms ease, box-shadow 150ms ease;
+  }
+}

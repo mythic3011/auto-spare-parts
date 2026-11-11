@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Signed out | SLMC Portal</title>
+    <meta name="description" content="You have signed out of the SLMC demo portal.">
+    <meta name="robots" content="noindex, nofollow">
+    <meta name="application-name" content="SLMC Portal">
+    <meta name="theme-color" content="#f8fafc" media="(prefers-color-scheme: light)">
+    <meta name="theme-color" content="#020617" media="(prefers-color-scheme: dark)">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="SLMC Portal">
+    <meta property="og:title" content="Signed out | SLMC Portal">
+    <meta property="og:description" content="You have signed out of the SLMC demo portal.">
+    <meta property="og:image" content="/resources/image/SLMC_Icon.png">
+    <link rel="icon" href="/resources/image/SLMC_Icon.png" type="image/png" media="(prefers-color-scheme: light)">
+    <link rel="icon" href="/resources/image/SLMC_Icon_DM.png" type="image/png" media="(prefers-color-scheme: dark)">
+    <link rel="apple-touch-icon" href="/resources/image/SLMC_Icon.png">
+    <script src="/resources/js/theme.global.js"></script>
+
+    
+    
+    
+    
+    <meta content="mythic3011,Hwhstudent,wailim0506" name="Author"/>
+    
+    
+    <meta content="Smart & Luxury Motor Company" name="generator"/>
+    <meta content="Copyright &copy; 2024 Smart & Luxury Motor Company" name="copyright"/>
+    <meta content="1 days" name="revisit-after"/>
+    
+    <link rel="stylesheet" href="/resources/css/portal.css">
+    <script type="module" src="resources/js/script.js"></script>
+    
+</head>
+<body class="portal-page bg-white text-gray-900 mx-auto font-sans dark:bg-slate-900 dark:text-white"
+      onload="checkUserThemePreference()">
+<div class="container mx-auto px-5 py-5 text-center rounded-md">
+    <div class="container mx-auto px-5 py-5 text-center rounded-md">
+        <img alt="logo" class="mx-auto w-32 h-32 mb-4 transition-all duration-300 ease-in-out cursor-pointer"
+             src="resources/image/SLMC_Icon_login.jpg">
+        <br>
+        <div class="container mx-auto px-4 py-4">
+            <div class="flex"
+                 style="margin-top: 1rem; justify-content: center; align-items: center; width: 100%; text-align: center;">
+                <h1 class="text-3xl font-bold text-center" id="message-Logout-Successful-1">
+                    You have successfully logged out.
+                </h1>
+            </div>
+            <p class="text-center pt-10" id="message-Logout-Successful-2">
+                You can now close this window.
+            </p>
+        </div>
+    </div>
+</div>
+<button id="darkModeToggle" class="fixed bottom-4 right-4 p-2 bg-gray-200 dark:bg-gray-700 rounded-full shadow-lg" title="Toggle dark mode">
+    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-gray-800 dark:text-yellow-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+    </svg>
+</button>
+</body>
+<script>
+    window.onload = () => {
+        setTimeout(() => {
+            window.location.href = 'index.php'; // replace with your desired URL
+        }, 5000); // 5000 milliseconds = 5 seconds
+    };
+    if (document.referrer === "" || !document.referrer.includes(window.location.hostname)) {
+        window.location.href = 'index.php';
+    }
+
+</script>
+</html>

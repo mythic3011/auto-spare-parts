@@ -1,0 +1,855 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Profile settings | SLMC Portal</title>
+    <meta name="description" content="Update your dealer profile and account password.">
+    <meta name="robots" content="noindex, nofollow">
+    <meta name="application-name" content="SLMC Portal">
+    <meta name="theme-color" content="#f8fafc" media="(prefers-color-scheme: light)">
+    <meta name="theme-color" content="#020617" media="(prefers-color-scheme: dark)">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="SLMC Portal">
+    <meta property="og:title" content="Profile settings | SLMC Portal">
+    <meta property="og:description" content="Update your dealer profile and account password.">
+    <meta property="og:image" content="/resources/image/SLMC_Icon.png">
+    <link rel="icon" href="/resources/image/SLMC_Icon.png" type="image/png" media="(prefers-color-scheme: light)">
+    <link rel="icon" href="/resources/image/SLMC_Icon_DM.png" type="image/png" media="(prefers-color-scheme: dark)">
+    <link rel="apple-touch-icon" href="/resources/image/SLMC_Icon.png">
+    <script src="/resources/js/theme.global.js"></script>
+
+    
+    
+    
+    <!--    <link href="../../resources/css/profileSetting.css" rel="stylesheet"/>-->
+    
+    <!--    <script src="../../resources/js/profileSetting.js"></script>-->
+    <script type="module" src="../../resources/js/script.js"></script>
+    <link rel="stylesheet" href="/resources/css/portal.css">
+    <script src="../../resources/js/module/config/endpoints.global.js"></script>
+    
+    <script>
+      function getElement(id) {
+        return document.getElementById(id);
+      }
+
+      function setInputValue(id, value) {
+        const element = getElement(id);
+
+        if (element) {
+          element.value = value || "";
+        }
+      }
+
+      function setTextValue(id, value, fallback = "N/A") {
+        const element = getElement(id);
+
+        if (element) {
+          element.textContent = value || fallback;
+        }
+      }
+
+      function showMessage(type, message) {
+        const box = getElement("profileSettingMessage");
+
+        if (!box) {
+          alert(message);
+          return;
+        }
+
+        box.textContent = message;
+        box.className =
+          type === "success"
+            ? "mb-4 rounded-lg border border-green-200 bg-green-50 p-4 text-green-700 dark:border-green-800 dark:bg-green-900/20 dark:text-green-300"
+            : "mb-4 rounded-lg border border-red-200 bg-red-50 p-4 text-red-700 dark:border-red-800 dark:bg-red-900/20 dark:text-red-300";
+        box.classList.remove("hidden");
+      }
+
+      function clearFieldErrors() {
+        document.querySelectorAll("[data-field-error]").forEach((element) => {
+          element.classList.add("hidden");
+        });
+
+        document
+          .querySelectorAll("[data-validated-field]")
+          .forEach((element) => {
+            element.classList.remove("border-red-500");
+          });
+      }
+
+      function showFieldError(inputId, errorId) {
+        const input = getElement(inputId);
+        const error = getElement(errorId);
+
+        if (input) {
+          input.classList.add("border-red-500");
+        }
+
+        if (error) {
+          error.classList.remove("hidden");
+        }
+      }
+
+      async function loadInfo() {
+        const profileApi = window.APP_API_ENDPOINTS?.profileLegacy;
+        if (!profileApi) {
+          throw new Error("Missing APP_API_ENDPOINTS.profileLegacy");
+        }
+        try {
+          const response = await fetch(
+            `${profileApi}?action=getEditInfo`,
+            {
+              method: "GET",
+              headers: {
+                Accept: "application/json",
+              },
+              credentials: "same-origin",
+            },
+          );
+
+          if (!response.ok) {
+            throw new Error(
+              `Profile request failed with status ${response.status}`,
+            );
+          }
+
+          const data = await response.json();
+          const fullName = String(data.name || "").trim();
+          const nameParts = fullName.split(/\s+/).filter(Boolean);
+          const firstName = nameParts[0] || "";
+          const lastName = nameParts.slice(1).join(" ");
+
+          setInputValue("editFirstName", firstName);
+          setInputValue("editLastName", lastName);
+          setInputValue("editMobileNumber", data.contactNumber);
+          setInputValue("editFaxNumber", data.faxNumber);
+          setInputValue("editAddressLine1", data.address);
+          setTextValue("Full-name", fullName);
+          setTextValue("email", data.email);
+        } catch (error) {
+          console.error("Failed to load profile setting:", error);
+          showMessage(
+            "error",
+            "Failed to load profile information. Please refresh the page or try again later.",
+          );
+        }
+      }
+
+      function validateProfileInput() {
+        clearFieldErrors();
+
+        const firstName = getElement("editFirstName")?.value.trim() || "";
+        const lastName = getElement("editLastName")?.value.trim() || "";
+        const mobileNumber = getElement("editMobileNumber")?.value.trim() || "";
+        const faxNumber = getElement("editFaxNumber")?.value.trim() || "";
+        const addressLine1 = getElement("editAddressLine1")?.value.trim() || "";
+
+        if (!firstName) {
+          showFieldError("editFirstName", "editFirstNameError");
+          return null;
+        }
+
+        if (!lastName) {
+          showFieldError("editLastName", "editLastNameError");
+          return null;
+        }
+
+        if (!/^\d{8,15}$/.test(mobileNumber)) {
+          showFieldError("editMobileNumber", "editMobileNumberError");
+          return null;
+        }
+
+        if (!/^\d{8,15}$/.test(faxNumber)) {
+          showFieldError("editFaxNumber", "editFaxNumberError");
+          return null;
+        }
+
+        if (!addressLine1) {
+          showFieldError("editAddressLine1", "editAddressLine1Error");
+          return null;
+        }
+
+        return {
+          name: `${firstName} ${lastName}`.trim(),
+          mobileNumber,
+          faxNumber,
+          addressLine1,
+        };
+      }
+
+      async function updateProfile1() {
+        const payload = validateProfileInput();
+
+        if (!payload) {
+          return;
+        }
+
+        const params = new URLSearchParams({
+          action: "updateProfile",
+          name: payload.name,
+          mobileNumber: payload.mobileNumber,
+          faxNumber: payload.faxNumber,
+          addressLine1: payload.addressLine1,
+        });
+
+        const profileApi = window.APP_API_ENDPOINTS?.profileLegacy;
+        if (!profileApi) {
+          throw new Error("Missing APP_API_ENDPOINTS.profileLegacy");
+        }
+        try {
+          const response = await fetch(profileApi, {
+            method: "POST",
+            headers: {
+              Accept: "application/json",
+              "Content-Type": "application/x-www-form-urlencoded",
+            },
+            body: params.toString(),
+            credentials: "same-origin",
+          });
+
+          if (!response.ok) {
+            throw new Error(
+              `Update profile failed with status ${response.status}`,
+            );
+          }
+
+          const data = await response.json();
+
+          if (data.status === "success") {
+            showMessage("success", "Profile updated successfully.");
+            window.location.href = "profile.html";
+            return;
+          }
+
+          showMessage(
+            "error",
+            "Profile was not updated. Please check the details and try again.",
+          );
+        } catch (error) {
+          console.error("Failed to update profile:", error);
+          showMessage(
+            "error",
+            "Failed to update profile. Please try again later.",
+          );
+        }
+      }
+
+      function validatePasswordInput() {
+        clearFieldErrors();
+
+        const currentPassword = getElement("currentPassword")?.value || "";
+        const newPassword = getElement("newPassword")?.value || "";
+        const confirmPassword = getElement("confirmPassword")?.value || "";
+
+        if (!currentPassword) {
+          showFieldError("currentPassword", "editCurrentPasswordError");
+          return null;
+        }
+
+        if (!newPassword) {
+          showFieldError("newPassword", "editNewPasswordError");
+          return null;
+        }
+
+        if (newPassword.length < 8) {
+          showFieldError("newPassword", "editNewPasswordLengthError");
+          return null;
+        }
+
+        if (!confirmPassword) {
+          showFieldError("confirmPassword", "editConfirmPasswordError");
+          return null;
+        }
+
+        if (newPassword !== confirmPassword) {
+          showFieldError("confirmPassword", "editConfirmPasswordNotMatchError");
+          return null;
+        }
+
+        if (currentPassword === newPassword) {
+          showFieldError("newPassword", "editNewPasswordSameError");
+          return null;
+        }
+
+        return {
+          currentPassword,
+          newPassword,
+        };
+      }
+
+      async function updatePassword1() {
+        const payload = validatePasswordInput();
+
+        if (!payload) {
+          return;
+        }
+
+        const params = new URLSearchParams({
+          action: "updatePassword",
+          oldPassword: payload.currentPassword,
+          newPassword: payload.newPassword,
+        });
+
+        const profileApi = window.APP_API_ENDPOINTS?.profileLegacy;
+        if (!profileApi) {
+          throw new Error("Missing APP_API_ENDPOINTS.profileLegacy");
+        }
+        try {
+          const response = await fetch(profileApi, {
+            method: "POST",
+            headers: {
+              Accept: "application/json",
+              "Content-Type": "application/x-www-form-urlencoded",
+            },
+            body: params.toString(),
+            credentials: "same-origin",
+          });
+
+          if (!response.ok) {
+            throw new Error(
+              `Update password failed with status ${response.status}`,
+            );
+          }
+
+          const data = await response.json();
+
+          if (data.status === "success") {
+            showMessage("success", "Password updated successfully.");
+            window.location.href = "profile.html";
+            return;
+          }
+
+          showMessage(
+            "error",
+            "Failed to update password. Please check your current password and try again.",
+          );
+        } catch (error) {
+          console.error("Failed to update password:", error);
+          showMessage(
+            "error",
+            "Failed to update password. Please try again later.",
+          );
+        }
+      }
+
+      document.addEventListener("DOMContentLoaded", () => {
+        loadInfo();
+      });
+    </script>
+  </head>
+  <body class="portal-page bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-white">
+    <nav class="bg-white border-gray-200 dark:bg-gray-900">
+      <div
+        class="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4"
+      >
+        <a class="flex items-center space-x-3 rtl:space-x-reverse" href="#">
+          <div class="h-8 w-8 relative">
+            <img
+              alt="SLMC Logo"
+              class="absolute inset-0 object-contain dark:hidden pt-2 dark:pt-1"
+              src="../../resources/image/SLMC_LOGO.png"
+            />
+            <img
+              alt="SLMC Logo"
+              class="absolute inset-0 object-contain hidden dark:block"
+              src="../../resources/image/SLMC_LOGO_DM.png"
+            />
+          </div>
+          <span
+            class="self-center text-2xl font-semibold whitespace-nowrap dark:text-white"
+            >SLMC</span
+          >
+        </a>
+
+        <div class="flex items-center md:order-2">
+          <!-- Dark mode toggle button -->
+          <button
+            class="p-2 text-gray-500 rounded-lg hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-700"
+            id="darkModeToggle"
+          >
+            <svg
+              class="w-5 h-5"
+              fill="currentColor"
+              viewBox="0 0 20 20"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"
+              ></path>
+            </svg>
+          </button>
+
+          <!-- Mobile menu button -->
+          <button
+            aria-controls="navbar-default"
+            aria-expanded="false"
+            class="inline-flex items-center p-2 w-10 h-10 justify-center text-sm text-gray-500 rounded-lg md:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600"
+            id="mobile-menu-button"
+            type="button"
+          >
+            <span class="sr-only">Open main menu</span>
+            <svg
+              aria-hidden="true"
+              class="w-5 h-5"
+              fill="none"
+              viewBox="0 0 17 14"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M1 1h15M1 7h15M1 13h15"
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+              />
+            </svg>
+          </button>
+        </div>
+
+        <div
+          class="hidden w-full md:flex md:w-auto md:order-1"
+          id="navbar-default"
+        >
+          <ul
+            class="font-medium flex flex-col p-4 md:p-0 mt-4 border border-gray-100 rounded-lg bg-gray-50 md:flex-row md:space-x-8 rtl:space-x-reverse md:mt-0 md:border-0 md:bg-white dark:bg-gray-800 md:dark:bg-gray-900 dark:border-gray-700"
+          >
+            <li>
+              <a
+                class="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent"
+                href="viewOrderRecord.html"
+                >Order Record</a
+              >
+            </li>
+            <li>
+              <a
+                class="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent"
+                href="viewSparePart.php"
+                >Spare Part</a
+              >
+            </li>
+            <li>
+              <a
+                class="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent"
+                href="shoppingCart.php"
+                >Cart</a
+              >
+            </li>
+            <li>
+              <a
+                class="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent"
+                href="profile.html"
+                >Profile</a
+              >
+            </li>
+            <li>
+              <a
+                id="logoutButton"
+                class="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent"
+                href="../../logout.html"
+                onclick="logout()"
+                >Log Out</a
+              >
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+    <!--------------------Menu-------------------->
+
+    <main>
+      <!--------------------Profile-------------------->
+      <div id="profileSettingMessage" class="hidden"></div>
+      <div class="container mx-auto px-4 py-8">
+        <div
+          class="bg-white dark:bg-gray-800 shadow-lg rounded-lg overflow-hidden"
+        >
+          <div class="md:flex">
+            <!-- Left side - User info -->
+            <div class="md:w-1/3 bg-gray-100 dark:bg-gray-700 p-8 text-center">
+              <svg
+                class="mx-auto w-32 h-32 rounded-full border-4 border-white dark:border-none"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.5"
+                viewBox="0 0 24 24"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M17.982 18.725A7.488 7.488 0 0 0 12 15.75a7.488 7.488 0 0 0-5.982 2.975m11.963 0a9 9 0 1 0-11.963 0m11.963 0A8.966 8.966 0 0 1 12 21a8.966 8.966 0 0 1-5.982-2.275M15 9.75a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+              </svg>
+              <h2
+                class="mt-4 text-xl font-semibold text-gray-800 dark:text-white"
+                id="Full-name"
+              ></h2>
+              <p class="text-gray-600 dark:text-gray-300" id="email"></p>
+            </div>
+
+            <!-- Right side - Profile details -->
+            <div class="md:w-2/3 p-8">
+              <h3
+                class="text-2xl font-semibold text-gray-800 dark:text-white mb-6"
+              >
+                Profile Settings
+              </h3>
+              <form
+                class="space-y-4"
+                id="updateProfileForm"
+                onsubmit="updateProfile()"
+                method="POST"
+              >
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
+                    <label
+                      class="block text-sm font-medium text-gray-700 dark:text-gray-300"
+                      for="editFirstName"
+                      >First Name</label
+                    >
+                    <input
+                      class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                      id="editFirstName"
+                      name="editFirstName"
+                      data-validated-field
+                      readonly
+                      type="text"
+                    />
+                    <p
+                      id="editFirstNameError"
+                      data-field-error
+                      class="mt-2 text-sm text-red-600 dark:text-red-400 hidden"
+                    >
+                      Please enter your first name.
+                    </p>
+                  </div>
+                  <div>
+                    <label
+                      class="block text-sm font-medium text-gray-700 dark:text-gray-300"
+                      for="editLastName"
+                      >Last Name</label
+                    >
+                    <input
+                      class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                      id="editLastName"
+                      name="editLastName"
+                      data-validated-field
+                      readonly
+                      type="text"
+                    />
+                    <p
+                      id="editLastNameError"
+                      data-field-error
+                      class="mt-2 text-sm text-red-600 dark:text-red-400 hidden"
+                    >
+                      Please enter your last name.
+                    </p>
+                  </div>
+                  <div>
+                    <label
+                      class="block text-sm font-medium text-gray-700 dark:text-gray-300"
+                      for="editMobileNumber"
+                      >Mobile Number</label
+                    >
+                    <input
+                      class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                      id="editMobileNumber"
+                      name="editMobileNumber"
+                      data-validated-field
+                      inputmode="numeric"
+                      pattern="[0-9]{8,15}"
+                      placeholder="Mobile Number"
+                      type="text"
+                    />
+                    <p
+                      id="editMobileNumberError"
+                      data-field-error
+                      class="mt-2 text-sm text-red-600 dark:text-red-400 hidden"
+                    >
+                      Please enter a valid mobile number.
+                    </p>
+                  </div>
+                  <div>
+                    <label
+                      class="block text-sm font-medium text-gray-700 dark:text-gray-300"
+                      for="editFaxNumber"
+                      >Fax Number</label
+                    >
+                    <input
+                      class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                      id="editFaxNumber"
+                      name="editFaxNumber"
+                      data-validated-field
+                      inputmode="numeric"
+                      pattern="[0-9]{8,15}"
+                      placeholder="Fax Number"
+                      type="text"
+                    />
+                    <p
+                      id="editFaxNumberError"
+                      data-field-error
+                      class="mt-2 text-sm text-red-600 dark:text-red-400 hidden"
+                    >
+                      Please enter a valid fax number.
+                    </p>
+                  </div>
+                </div>
+                <div>
+                  <label
+                    class="block text-sm font-medium text-gray-700 dark:text-gray-300"
+                    for="editAddressLine1"
+                    >Address Line
+                  </label>
+                  <input
+                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                    id="editAddressLine1"
+                    name="editAddressLine1"
+                    data-validated-field
+                    value="Room 1203, Building C, Jinhua Garden"
+                    placeholder="Address Line 1"
+                    type="text"
+                  />
+                  <p
+                    class="mt-2 text-sm text-red-600 dark:text-red-400 hidden"
+                    data-field-error
+                    id="editAddressLine1Error"
+                  >
+                    Please enter a valid address.
+                  </p>
+                </div>
+                <!-- <div>
+                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300"
+                                   for="editAddressLine2">Address Line
+                                2</label>
+                            <input class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                                   id="editAddressLine2" name="editAddressLine2"
+                                   value="No. 88, East Avenue"
+                                   placeholder="Address Line 2"
+                                   type="text">
+                                <p class="mt-2 text-sm text-gray-500 dark:text-gray-400 hidden" id="editAddressLine2Error">Please enter a valid address line 2.</p>
+                        </div> -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <!-- <div>
+                                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300"
+                                       for="editStateProvince">State/Province</label>
+                                <input class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                                       id="editStateProvince" name="stateProvince"
+                                       value="Guangdong"
+                                       placeholder="State/Province"
+                                       type="text">
+                                <p class="mt-2 text-sm text-gray-500 dark:text-gray-400 hidden" id="editStateProvinceError">Please enter a valid state/province.</p>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300" for="editCountry">Country</label>
+                                <input class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                                       id="editCountry" name="editCountry"
+                                       placeholder="Country"
+                                       type="text">
+                                <p class="mt-2 text-sm text-gray-500 dark:text-gray-400 hidden" id="editCountryError">Please enter a valid country.</p>
+                            </div> -->
+                </div>
+                <div>
+                  <button
+                    class="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition duration-150 ease-in-out"
+                    onclick="updateProfile1()"
+                    type="button"
+                  >
+                    Save Profile
+                  </button>
+                </div>
+              </form>
+
+              <h3
+                class="text-2xl font-semibold text-gray-800 dark:text-white mt-8 mb-6"
+              >
+                Password Settings
+              </h3>
+              <form
+                class="space-y-4"
+                id="passwordForm"
+                onsubmit="updatePassword()"
+                method="POST"
+              >
+                <div>
+                  <label
+                    class="block text-sm font-medium text-gray-700 dark:text-gray-300"
+                    for="currentPassword"
+                    >Current Password</label
+                  >
+                  <input
+                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                    id="currentPassword"
+                    name="currentPassword"
+                    data-validated-field
+                    placeholder="Current Password"
+                    type="password"
+                  />
+                  <p
+                    class="mt-2 text-sm text-red-600 dark:text-red-400 hidden"
+                    data-field-error
+                    id="editCurrentPasswordError"
+                  >
+                    Please enter your current password.
+                  </p>
+                  <p
+                    class="mt-2 text-sm text-red-600 dark:text-red-400 hidden"
+                    data-field-error
+                    id="editCurrentPasswordIncorrectError"
+                  >
+                    Incorrect password, please try again.
+                  </p>
+                </div>
+                <div>
+                  <label
+                    class="block text-sm font-medium text-gray-700 dark:text-gray-300"
+                    for="newPassword"
+                    >New Password</label
+                  >
+                  <input
+                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                    id="newPassword"
+                    name="newPassword"
+                    data-validated-field
+                    placeholder="New Password"
+                    type="password"
+                  />
+                  <p
+                    class="mt-2 text-sm text-red-600 dark:text-red-400 hidden"
+                    data-field-error
+                    id="editNewPasswordError"
+                  >
+                    Please enter a new password.
+                  </p>
+                  <p
+                    class="mt-2 text-sm text-red-600 dark:text-red-400 hidden"
+                    data-field-error
+                    id="editNewPasswordLengthError"
+                  >
+                    Password must contain at least 8 characters.
+                  </p>
+                  <p
+                    class="mt-2 text-sm text-red-600 dark:text-red-400 hidden"
+                    data-field-error
+                    id="editNewPasswordSameError"
+                  >
+                    Passwords cannot be the same as your current password.
+                  </p>
+                </div>
+                <div>
+                  <label
+                    class="block text-sm font-medium text-gray-700 dark:text-gray-300"
+                    for="confirmPassword"
+                    >Confirm New Password</label
+                  >
+                  <input
+                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                    id="confirmPassword"
+                    name="confirmPassword"
+                    data-validated-field
+                    placeholder="Confirm New Password"
+                    type="password"
+                  />
+                  <p
+                    class="mt-2 text-sm text-red-600 dark:text-red-400 hidden"
+                    data-field-error
+                    id="editConfirmPasswordError"
+                  >
+                    Please enter your new password again.
+                  </p>
+                  <p
+                    class="mt-2 text-sm text-red-600 dark:text-red-400 hidden"
+                    data-field-error
+                    id="editConfirmPasswordNotMatchError"
+                  >
+                    Passwords not match as new password.
+                  </p>
+                </div>
+                <div>
+                  <button
+                    class="w-full bg-green-600 text-white py-2 px-4 rounded-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 transition duration-150 ease-in-out"
+                    onclick="updatePassword1()"
+                    type="button"
+                  >
+                    Update Password
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+      <footer
+        class="bg-white border-t border-gray-200 dark:bg-gray-900 dark:border-gray-700"
+      >
+        <div class="container mx-auto px-4 py-8">
+          <div
+            class="flex flex-wrap items-center justify-between md:flex-no-wrap"
+          >
+            <div class="flex items-center mb-6 md:mb-0">
+              <span class="text-sm text-gray-500 dark:text-gray-400"
+                >Copyright &copy; 2023 Smart & Luxury Motor Company</span
+              >
+            </div>
+            <div
+              class="flex items-center justify-between space-x-6 md:space-x-12"
+            >
+              <div class="flex items-center justify-between space-x-6">
+                <div class="flex items-center">
+                  <a class="text-gray-600 dark:text-gray-400" href="#"
+                    >About Us</a
+                  >
+                  <span
+                    class="bg-gray-200 dark:bg-gray-700 dark:text-gray-400 rounded-full mx-3 h-5 w-5 opacity-20 group-hover:opacity-0"
+                  ></span>
+                  <a class="text-gray-600 dark:text-gray-400" href="#"
+                    >Contact Us</a
+                  >
+                  <span
+                    class="bg-gray-200 dark:bg-gray-700 dark:text-gray-400 rounded-full mx-3 h-5 w-5 opacity-20 group-hover:opacity-0"
+                  ></span>
+                  <a class="text-gray-600 dark:text-gray-400" href="#"
+                    >Order Tracking</a
+                  >
+                  <span
+                    class="bg-gray-200 dark:bg-gray-700 dark:text-gray-400 rounded-full mx-3 h-5 w-5 opacity-20 group-hover:opacity-0"
+                  ></span>
+                  <a class="text-gray-600 dark:text-gray-400" href="#"
+                    >Returns</a
+                  >
+                  <span
+                    class="bg-gray-200 dark:bg-gray-700 dark:text-gray-400 rounded-full mx-3 h-5 w-5 opacity-20 group-hover:opacity-0"
+                  ></span>
+                  <a class="text-gray-600 dark:text-gray-400" href="#">FAQ</a>
+                </div>
+                <div class="flex items-center">
+                  <a class="text-gray-600 dark:text-gray-400" href="#"
+                    >Terms of Service</a
+                  >
+                  <span
+                    class="bg-gray-200 dark:bg-gray-700 dark:text-gray-400 rounded-full mx-3 h-5 w-5 opacity-20 group-hover:opacity-0"
+                  ></span>
+                  <a class="text-gray-600 dark:text-gray-400" href="#"
+                    >Privacy Policy</a
+                  >
+                  <span
+                    class="bg-gray-200 dark:bg-gray-700 dark:text-gray-400 rounded-full mx-3 h-5 w-5 opacity-20 group-hover:opacity-0"
+                  ></span>
+                  <a class="text-gray-600 dark:text-gray-400" href="#"
+                    >Site Map</a
+                  >
+                  <span
+                    class="bg-gray-200 dark:bg-gray-700 dark:text-gray-400 rounded-full mx-3 h-5 w-5 opacity-20 group-hover:opacity-0"
+                  ></span>
+                  <a class="text-gray-600 dark:text-gray-400" href="#"
+                    >Contact Us</a
+                  >
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </footer>
+    </main>
+  </body>
+</html>

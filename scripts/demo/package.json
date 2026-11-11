@@ -1,0 +1,16 @@
+{
+  "name": "@auto-spare-parts/demo-capture",
+  "private": true,
+  "type": "module",
+  "dependencies": {
+    "playwright": "1.56.1"
+  },
+  "scripts": {
+    "capture": "node capture.mjs",
+    "check:login": "node check-login.mjs",
+    "check:checkout": "node check-checkout.mjs",
+    "check:staff": "node check-staff.mjs",
+    "check:staff-layout": "node check-staff-layout.mjs",
+    "check:staff-filters": "node check-staff-filters.mjs"
+  }
+}

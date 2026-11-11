@@ -1,0 +1,45 @@
+# Isolated, disposable validation stack. No host ports or persistent volumes.
+services:
+  nginx:
+    image: nginx:1.21.6
+    volumes:
+      - ../resources/docker/nginx:/etc/nginx:ro
+      - ..:/var/www/html:ro
+    depends_on: [php]
+  php:
+    build:
+      context: ..
+      dockerfile: Dockerfile
+    environment:
+      VALIDATION_STACK: 'true'
+      APP_ENV: testing
+      APP_DEBUG: 'false'
+      DOCKER_ENV: 'true'
+      DB_DOCKER_HOST: mariadb
+      DB_DOCKER_NAME: projectDB
+      DB_DOCKER_USER: root
+      DB_DOCKER_PASSWORD: validation-only
+      DB_QUERY_CACHE: 'false'
+      SHIPPING_SERVICE_URL: http://api:8080
+    volumes:
+      - ..:/var/www/html
+    depends_on:
+      mariadb:
+        condition: service_healthy
+  mariadb:
+    image: mariadb:10.5
+    environment:
+      MYSQL_ROOT_PASSWORD: validation-only
+      MYSQL_DATABASE: projectdb_test
+    tmpfs: [/var/lib/mysql]
+    volumes:
+      - ../sql-scripts/setup.sql:/docker-entrypoint-initdb.d/setup.sql:ro
+    healthcheck:
+      test: ['CMD', 'mysqladmin', 'ping', '-h', 'localhost', '-pvalidation-only']
+      interval: 2s
+      timeout: 2s
+      retries: 30
+  api:
+    build:
+      context: ../resources/py
+      dockerfile: Dockerfile

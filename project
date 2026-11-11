@@ -1,0 +1,39 @@
+#!/usr/bin/env bash
+# Repository command entrypoint. Keep lifecycle implementation in scripts/.
+set -euo pipefail
+PROJECT_ROOT="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
+usage() {
+    cat <<'HELP'
+Auto Spare Parts
+Usage: ./project <command>
+
+  start       Initialize, build and wait for the local application
+  init        Create .env only if absent
+  preflight   Check source, configuration and Docker prerequisites
+  status      Show service health and published ports
+  logs        Follow the last 100 service log lines
+  stop        Stop services, preserving database and dependency volumes
+  test        Run the NewApi unit suite (running stack required)
+  help        Show this command list
+
+Web: http://127.0.0.1:8880 (default; see WEB_PORT in .env)
+Application document root: public/
+Runtime and migration details: docs/api/runtime-contract.md
+HELP
+}
+[[ $# -le 1 ]] || { usage >&2; exit 2; }
+case "${1:-help}" in
+    help|-h|--help) usage ;;
+    start) exec bash "$PROJECT_ROOT/scripts/bootstrap.sh" ;;
+    init|preflight) exec bash "$PROJECT_ROOT/scripts/$1.sh" ;;
+    status|logs|stop|test)
+        source "$PROJECT_ROOT/scripts/docker-common.sh"
+        case "$1" in
+            status) compose ps ;;
+            logs) compose logs --tail=100 --follow ;;
+            stop) compose down ;;
+            test) compose exec -T php php vendor/bin/phpunit --testsuite NewApi --no-logging ;;
+        esac
+        ;;
+    *) printf 'Unknown command: %s\n' "$1" >&2; usage >&2; exit 2 ;;
+esac

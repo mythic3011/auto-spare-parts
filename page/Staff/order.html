@@ -1,0 +1,218 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Staff orders | SLMC Portal</title>
+    <meta name="description" content="Review and manage dealer orders.">
+    <meta name="robots" content="noindex, nofollow">
+    <meta name="application-name" content="SLMC Portal">
+    <meta name="theme-color" content="#f8fafc" media="(prefers-color-scheme: light)">
+    <meta name="theme-color" content="#020617" media="(prefers-color-scheme: dark)">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="SLMC Portal">
+    <meta property="og:title" content="Staff orders | SLMC Portal">
+    <meta property="og:description" content="Review and manage dealer orders.">
+    <meta property="og:image" content="/resources/image/SLMC_Icon.png">
+    <link rel="icon" href="/resources/image/SLMC_Icon.png" type="image/png" media="(prefers-color-scheme: light)">
+    <link rel="icon" href="/resources/image/SLMC_Icon_DM.png" type="image/png" media="(prefers-color-scheme: dark)">
+    <link rel="apple-touch-icon" href="/resources/image/SLMC_Icon.png">
+    <script src="/resources/js/theme.global.js"></script>
+
+
+
+
+    <link href="../../resources/css/order.css" rel="stylesheet"/>
+
+    <script type="module" src="../../resources/js/script.js"></script>
+    <script src="../../resources/js/module/config/endpoints.global.js"></script>
+    <link rel="stylesheet" href="/resources/css/portal.css">
+    <script type="module" src="../../resources/js/ManageOrder.js"></script>
+
+
+<link rel="stylesheet" href="/resources/css/staff.css">
+<script src="/resources/js/staff-shell.global.js" defer></script>
+<script src="/resources/js/staff-filters.js" defer></script>
+</head>
+<body class="portal-page staff-page" data-staff-page="orders">
+<a class="staff-skip" href="#staffMain">Skip to content</a>
+<aside class="staff-sidebar" id="staffSidebar" aria-label="Staff workspace">
+ <a class="staff-brand" href="order.html"><img src="/resources/image/SLMC_Icon.png" alt=""><span>SLMC<small>Staff workspace</small></span></a>
+ <p class="staff-nav-label">Workspace</p><nav aria-label="Staff navigation"><a href="order.html" aria-current="page"><span class="staff-nav-symbol" aria-hidden="true">≡</span>Orders</a><a href="Item.html" ><span class="staff-nav-symbol" aria-hidden="true">□</span>Catalog</a><a href="genreport.html" ><span class="staff-nav-symbol" aria-hidden="true">↗</span>Reports</a></nav>
+ <div class="staff-sidebar-bottom"><span class="staff-avatar" aria-hidden="true">S</span><div>Staff portal<small>Sales management</small></div><a href="/logout.php" aria-label="Sign out" title="Sign out">↗</a></div>
+</aside>
+<div class="staff-workspace">
+ <header class="staff-header"><div class="staff-header-location"><button type="button" id="mobileMenuButton" aria-label="Open navigation" aria-expanded="false" aria-controls="mobileMenu">☰</button><span>Workspace</span><span aria-hidden="true">/</span><strong>Orders</strong></div><div class="staff-header-actions"><span class="staff-role">Sales manager</span><button type="button" id="darkModeToggle" aria-label="Toggle theme">◐</button><a href="/logout.php">Sign out</a></div></header>
+ <nav id="mobileMenu" aria-label="Mobile staff navigation" hidden><a href="order.html" aria-current="page"><span class="staff-nav-symbol" aria-hidden="true">≡</span>Orders</a><a href="Item.html" ><span class="staff-nav-symbol" aria-hidden="true">□</span>Catalog</a><a href="genreport.html" ><span class="staff-nav-symbol" aria-hidden="true">↗</span>Reports</a></nav>
+ <main id="staffMain" class="staff-main" tabindex="-1"><div class="staff-page-heading"><p>SLMC OPERATIONS</p><h1>Orders</h1><div>Review dealer orders and manage fulfillment.</div></div><div class="staff-content">
+        <section class="staff-section" id="orderSection">
+            <h1 class="text-3xl font-bold mb-4">Current Orders</h1>
+            <h2 class="text-xl mb-4" id="Total-Orders-number">Total: 7 orders</h2>
+
+            <div class="mb-4">
+                <a class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded" href="genreport.html">
+                    Generate report
+                </a>
+            </div>
+
+            <div class="overflow-x-auto shadow-md sm:rounded-lg">
+                <p class="text-sm text-gray-600 dark:text-gray-400" id="sortingInfo">Click the column header to
+                    sort.</p>
+                <div class="staff-table-scroll" tabindex="0" role="region" aria-label="Scrollable data table"><table class="w-full text-sm text-left text-gray-500 dark:text-gray-400" id="orderTable">
+                    <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                    <tr>
+                        <th class="px-6 py-3 cursor-pointer" onclick="sortTable(0)" scope="col">Order ID</th>
+                        <th class="px-6 py-3 cursor-pointer" onclick="sortTable(1)" scope="col">Sales Manager ID</th>
+                        <th class="px-6 py-3 cursor-pointer" onclick="sortTable(2)" scope="col">Order Date & Time</th>
+                        <th class="px-6 py-3 cursor-pointer" onclick="sortTable(3)" scope="col">Delivery Date</th>
+                        <th class="px-6 py-3 cursor-pointer" onclick="sortTable(4)" scope="col">status</th>
+                        <th class="px-6 py-3 cursor-pointer" onclick="sortTable(8)" scope="col">Shipping Cost</th>
+                        <th class="px-6 py-3 cursor-pointer" onclick="sortTable(9)" scope="col">Total Order Amount</th>
+                        <th class="px-6 py-3" scope="col">Update state</th>
+                    </tr>
+                    </thead>
+                    <tbody id="orderTableBody">
+                    <!-- Table rows will be inserted here by JavaScript -->
+                    </tbody>
+                </table></div>
+            </div>
+        </section>
+
+    </div></main>
+ <footer class="staff-footer">Smart &amp; Luxury Motor Company <span>Staff workspace</span></footer>
+</div>
+<script>
+        function showTableError(bodyId, error) {
+            const tableBody = document.getElementById(bodyId);
+            if (!tableBody) {
+                return;
+            }
+            tableBody.replaceChildren();
+            const row = document.createElement('tr');
+            const cell = document.createElement('td');
+            cell.colSpan = 11;
+            cell.className = 'text-center text-red-500';
+            cell.textContent = `Error loading orders: ${error && error.message ? error.message : 'Request failed'}`;
+            row.appendChild(cell);
+            tableBody.appendChild(row);
+        }
+
+        document.addEventListener('DOMContentLoaded', function () {
+            getOrderFromServer();
+        });
+
+        function getOrderFromServer() {
+            const apiBase = window.APP_API_ENDPOINTS?.orderManagerList;
+            if (!apiBase) {
+                throw new Error("Missing APP_API_ENDPOINTS.orderManagerList");
+            }
+            const apiUrl = `${apiBase}?action=Sales-manager-list`;
+            const AuthToken = window.SLMC_AUTH.getToken();
+
+            fetch(apiUrl, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer ' + AuthToken
+                },
+                credentials: 'include'
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.status === 'success' && Array.isArray(data.data?.orders)) {
+                        loadRecord(data.data.orders);
+                    } else {
+                        throw new Error(data.message || 'Failed to fetch order details');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error fetching order data:', error);
+                    showTableError('orderTableBody', error);
+                });
+        }
+
+        function loadRecord(orders) {
+            document.title = 'Orders | SLMC Portal';
+
+            const tableBody = document.getElementById('orderTableBody');
+            tableBody.replaceChildren(); // Clear existing content first
+
+            orders.forEach(order => {
+                const row = document.createElement('tr');
+                row.dataset.status = String(order.orderStatus);
+                row.dataset.date = String(order.orderDateTime).slice(0, 10);
+                row.dataset.search = [order.orderID, order.salesManagerID, order.dealerID, order.deliveryAddress].join(' ');
+                row.className = 'bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600';
+
+                const cellData = [
+                    {value: order.orderID, class: 'font-medium text-gray-900 dark:text-white'},
+                    {value: order.salesManagerID, class: 'text-gray-500 dark:text-gray-400 font-medium'},
+                    {value: order.orderDateTime, class: 'text-gray-500 dark:text-gray-400'},
+                    {value: order.deliveryDate, class: 'text-gray-500 dark:text-gray-400'},
+                    {
+                        value: order.orderStatus,
+                        class: `text-gray-900 dark:text-white font-semibold rounded-full inline-flex text-xxs leading-1 pt-4 px-2 py-4 pb-2 pr-2 pl-2 ${getStatusClass(order.orderStatus)}`
+                    },
+                    {value: order.shipCost, class: 'text-gray-500 dark:text-gray-400'},
+                    {value: order.totalCost, class: 'text-gray-900 dark:text-white font-bold'}
+                ];
+
+                cellData.forEach(data => {
+                    const cell = document.createElement('td');
+                    cell.className = `px-6 py-4 ${data.class}`;
+                    cell.textContent = Array.isArray(data.value) ? data.value.join(', ') : data.value;
+                    row.appendChild(cell);
+                });
+
+                const updateCell = document.createElement('td');
+                updateCell.className = 'px-6 py-4';
+                const updateLink = document.createElement('a');
+                updateLink.href = `orderinfo.html?OrderId=${order.orderID}`;
+                updateLink.className = 'font-medium text-blue-600 dark:text-blue-500 hover:underline';
+                updateLink.textContent = 'Update';
+                updateCell.appendChild(updateLink);
+                row.appendChild(updateCell);
+
+                tableBody.appendChild(row);
+            });
+
+            document.getElementById('Total-Orders-number').textContent = `Total: ${orders.length} orders`;
+        }
+
+        function getStatusClass(status) {
+            switch (status.toLowerCase()) {
+                case 'wait for confirmation':
+                    return 'bg-yellow-100 text-yellow-800 dark:bg-yellow-800 dark:text-yellow-100';
+                case 'shipped':
+                    return 'bg-green-100 text-green-800 dark:bg-green-800 dark:text-green-100';
+                case 'processing':
+                    return 'bg-blue-100 text-blue-800 dark:bg-blue-800 dark:text-blue-100';
+                case 'shipping':
+                    return 'bg-purple-100 text-purple-800 dark:bg-purple-800 dark:text-purple-100';
+                case 'cancelled':
+                    return 'bg-red-100 text-red-800 dark:bg-red-800 dark:text-red-100';
+                default:
+                    return 'bg-gray-100 text-gray-800 dark:bg-gray-800 dark:text-gray-100';
+            }
+        }
+
+        function sortTable(columnIndex) {
+            const table = document.getElementById('orderTable');
+            const tbody = table.querySelector('tbody');
+            const rows = Array.from(tbody.querySelectorAll('tr'));
+            const isAscending = table.getAttribute('data-order') === 'asc';
+
+            rows.sort((a, b) => {
+                const aValue = a.cells[columnIndex].textContent.trim();
+                const bValue = b.cells[columnIndex].textContent.trim();
+                return isAscending ? aValue.localeCompare(bValue) : bValue.localeCompare(aValue);
+            });
+
+            tbody.replaceChildren(); // Clear existing rows
+            rows.forEach(row => tbody.appendChild(row));
+
+            table.setAttribute('data-order', isAscending ? 'desc' : 'asc');
+        }
+    </script>
+</body>
+</html>

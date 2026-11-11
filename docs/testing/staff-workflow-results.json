@@ -1,0 +1,15 @@
+{
+  "capturedAt": "2026-11-11T22:51:59.363Z",
+  "project": "asp-staff-review",
+  "passed": [
+    "Add product through the staff form and persist its values",
+    "Edit product through the staff form and verify saved stock and price",
+    "Single and mixed-batch deletion reject ordered products and preserve the entire batch",
+    "Deletion modal explains the lock; deleting an unreferenced product succeeds through the UI",
+    "Staff order transitions Pending → Confirmed → Shipped → Delivered persist and refresh",
+    "Existing Processing orders can progress to Shipped and Delivered without rewriting old records",
+    "Stock report loads and CSV export downloads successfully",
+    "Dealer accounts cannot bypass staff deletion authority",
+    "No uncaught browser errors during tested staff workflows"
+  ]
+}

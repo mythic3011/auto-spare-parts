@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>500 Internal Server Error | Smart & Luxury Motor Company</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta http-equiv="X-UA-Compatible" content="ie=edge"/>
+    <meta
+            name="Description"
+            content="Login page for the Smart & Luxury Motor Company"
+    />
+    <meta name="Author" content="mythic3011,Hwhstudent,wailim0506"/>
+    <meta name="Keywords" content="Login page, Smart & Luxury Motor Company"/>
+    <meta name="robots" content="noindex, nofollow"/>
+    <meta name="generator" content="Smart & Luxury Motor Company"/>
+    <meta
+            name="copyright"
+            content="Copyright &copy; 2024 Smart & Luxury Motor Company"
+    />
+    <meta name="revisit-after" content="1 days"/>
+    <link rel="icon" href="../resources/image/SLMC_Icon_login.jpg" type="image/x-icon"/>
+    <link rel="stylesheet" href="../resources/css/index.css"/>
+    <script type="module" src="/resources/js/script.js"></script>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,typography,aspect-ratio,line-clamp,container-queries"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        primary: {
+                            "50": "#eff6ff",
+                            "100": "#dbeafe",
+                            "200": "#bfdbfe",
+                            "300": "#93c5fd",
+                            "400": "#60a5fa",
+                            "500": "#3b82f6",
+                            "600": "#2563eb",
+                            "700": "#1d4ed8",
+                            "800": "#1e40af",
+                            "900": "#1e3a8a",
+                            "950": "#172554"
+                        }
+                    }
+                },
+                fontFamily: {
+                    'body': [
+                        'Inter',
+                        'ui-sans-serif',
+                        'system-ui',
+                        '-apple-system',
+                        'system-ui',
+                        'Segoe UI',
+                        'Roboto',
+                        'Helvetica Neue',
+                        'Arial',
+                        'Noto Sans',
+                        'sans-serif',
+                        'Apple Color Emoji',
+                        'Segoe UI Emoji',
+                        'Segoe UI Symbol',
+                        'Noto Color Emoji'
+                    ],
+                    'sans': [
+                        'Inter',
+                        'ui-sans-serif',
+                        'system-ui',
+                        '-apple-system',
+                        'system-ui',
+                        'Segoe UI',
+                        'Roboto',
+                        'Helvetica Neue',
+                        'Arial',
+                        'Noto Sans',
+                        'sans-serif',
+                        'Apple Color Emoji',
+                        'Segoe UI Emoji',
+                        'Segoe UI Symbol',
+                        'Noto Color Emoji'
+                    ]
+                }
+            }
+        }
+    </script>
+</head>
+<body
+        class="bg-white text-gray-900 mx-auto font-sans dark:bg-slate-900"
+        onload="Redirect()"
+>
+<script>
+    function redirectUserRolePage() {
+        // check user role
+        const userRole = getCookie('userRole');
+        if (userRole === 'Dealer') {
+            window.location.href = '../page/Dealer/viewSparePart.php';
+        }else if (userRole === 'SalesPerson') {
+            window.location.href = '../page/salesperson/viewSparePart.html';
+        }else {
+            window.location.href = '403.html';
+        }
+    }
+
+    // Check if the user is not coming from the same domain or direct access this page
+    if (document.referrer === "" || !document.referrer.includes(window.location.hostname)) {
+        window.location.href = "../index.php";
+    } else {
+        redirectUserRolePage();
+    }
+
+    // Redirect the user to the homepage after 5 seconds
+    function Redirect() {
+        const countdownElement = document.getElementById("countdown-text");
+        let timeLeft = parseInt(countdownElement.innerHTML);
+        if (isNaN(timeLeft)) {
+            console.error('Invalid countdown value');
+            return;
+        }
+        const countdownTimer = setInterval(function () {
+            const seconds = timeLeft % 60;
+            countdownElement.innerHTML = seconds + "s";
+            if (timeLeft === 0) {
+                clearInterval(countdownTimer);
+                window.location.href = "../index.php";
+            }
+            timeLeft--;
+        }, 1000);
+    }
+</script>
+<main>
+    <div class="container px-16 py-16 mt-20 mb-20 mx-auto dark:text-white">
+        <div class="text-center">
+            <!-- Logo of the webpage -->
+            <img
+                    alt="logo"
+                    class="mx-auto w-32 h-32 mb-4 transition-all duration-300 ease-in-out cursor-pointer"
+                    src="../resources/image/SLMC_Icon_login.jpg"
+            />
+            <!-- Text displayed on the webpage -->
+            <span class="logintext mb-4 text-lg">500 Internal Server Error</span>
+        </div>
+        <!-- Form for user login -->
+        <p
+                class="mt-5 mb-5 p-4 pb-4 rounded-2xl text-left flex flex-col 2xl:col-span-2
+                col:col-span-1 justify-center items-center dark:shadow-none
+                dark:bg-shadow-8 dark:text-white"
+        >
+            <label
+                    class="text-sm font-bold mb-2 pr-2 pl-2 pt-2 mb-2 py-4 dark:text-white "
+            >
+                An internal server error occurred
+            </label>
+            <br>
+            <label
+                    class="text-sm font-bold mb-2 pr-2 pl-2 pt-2 mb-2 py-4 dark:text-white "
+            >
+                Please try again later
+            </label>
+            <br>
+            <label
+                    class="text-sm font-bold mb-2 pr-2 pl-2 pt-2 mb-2 py-4 dark:text-white" id="countdown"
+            >
+                <span id="countdown-text">5</span> seconds left
+            </label>
+        </p>
+        <button id="darkModeToggle" class="fixed bottom-4 right-4 p-2 bg-gray-200 dark:bg-gray-700 rounded-full shadow-lg" title="Toggle dark mode">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-gray-800 dark:text-yellow-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+            </svg>
+        </button>
+        <!-- Footer of the webpage -->
+        <footer class="container px-8 py-8 mt-20 mb-20 mx-auto">
+            <div class="text-center">
+                <!-- Copyright notice -->
+                <span
+                        class="text-black text-sm font-bold mb-2 pr-2 pl-2 pt-2 mb-2 py-4 dark:text-white"
+                >
+              Copyright &copy; 2024 Smart & Luxury Motor Company
+            </span>
+            </div>
+        </footer>
+    </div>
+</main>
+</body>
+</html>

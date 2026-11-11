@@ -1,0 +1,125 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta hstadium_imgp-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <title>Spare Part - C00005</title>
+        <link rel="stylesheet" href="../../resources/css/sparePartPage.css" />
+        <script>
+            function show(){   //show the hidden menu
+                document.getElementById('hidden_menu').style.display = 'block';
+                document.getElementById('body').style.overflow = 'hidden'; //disable scrolling so the index page will not be scrolled when the hidden menu shown
+            }
+
+            function hide(){   //hide the hidden menu
+                document.getElementById('hidden_menu').style.display = 'none';
+                document.getElementById('body').style.overflow = 'auto'; //allow scrolling so the index page can be scrolled after the hidden menu is hide
+            }
+        </script>
+    </head>
+    <body>
+    <!--------------------Menu-------------------->
+    <div class="menu">
+        <div class="menu_left">
+            <img src="../../resources/image/SLMC_LOGO.png" alt="SLMC Logo">
+        </div>
+        <div class="menu_center">
+            <div class="menu_tag"><span class="word"><a href="../../page/Dealer/viewOrderRecord.html">Order Record</a></span></div>
+            <div class="menu_tag"><span class="word"><a href="../../page/Dealer/viewSparePart.php">Spare Part</a></span></div>
+            <div class="menu_tag"><span class="word"><a href="../../page/Dealer/shoppingCart.php">Cart</a></span></div>
+            <div class="menu_tag"><span class="word"><a href="../../page/Dealer/profile.html">Profile</a></span></div>
+        </div>
+        <div class="menu_right">
+            <div class="menu_tag"><span class="word"><a href="../../index.php">Log Out</a></span></div>
+        </div>
+        <img src="../../resources/image/menu.png" class="hidden_menu_icon" onclick="show()" alt="Show Menu">
+    </div>
+
+    <div class="hidden_menu" id="hidden_menu">
+        <div class="hidden_menu_body">
+            <div class="hidden_menu_body_top">
+                <img class="hidden_menu_logo" src="../../resources/image/SLMC_LOGO.png" alt="SLMC Logo">
+                <img class="hidden_menu_x_icon" src="../../resources/image/close_black.png" onclick="hide()" alt="close">
+            </div>
+            <div class="hidden_menu_body_main">
+                <div class="hidden_menu_tag">
+                    <a href="../../page/Dealer/viewOrderRecord.html">Order Record</a>
+                </div>
+                <div class="hidden_menu_tag">
+                    <a href="../../page/Dealer/viewSparePart.php">Spare Part</a>
+                </div>
+                <div class="hidden_menu_tag">
+                    <a href="../../page/Dealer/shoppingCart.php">Cart</a>
+                </div>
+                <div class="hidden_menu_tag">
+                    <a href="../../page/Dealer/profile.html">Profile</a>
+                </div>
+                <div class="hidden_menu_tag hidden_menu_tag_last">
+                    <a href="../../index.php">Log Out</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--------------------Menu-------------------->
+
+    <!--------------------Spare Part-------------------->
+    <div class="spare_part">
+        <div class="image_section">
+            <img src="../../resources/image/spare/300005.jpg" alt="300005">
+        </div>
+        <div class="info_section">
+            <div class="name">
+                <p>Front Headlight</p>
+                <p class="no">No. C00005</p>
+            </div>
+            <div class="price">
+                <p>Unit Price: </p>
+                <p style="margin-left: 5px;">$3000</p>
+            </div>
+            <div class="stock_left">
+                <p>Stock Available: 140</p>
+            </div>
+            <div class="quantity">
+                <p>Quantity: </p>
+                <div class="quantity_input">
+                    <button class="button_add">+</button>
+                    <input type="number">
+                    <button class="button_minus">-</button>
+                </div>
+            </div>
+            <div class="buy">
+                <div class="buy_now buy_button">
+                    Buy It Now
+                </div>
+                <div class="add_to_cart buy_button">
+                    Add To Cart
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="detail">
+        <div class="detail_heading">
+            Spare Part Details
+        </div>
+        <div class="detail_info">
+            Name: Front Headlight
+        </div>
+        <div class="detail_info">
+            Spare Part Number: C00005
+        </div>
+        <div class="detail_info">
+            Unit Price: $3000
+        </div>
+        <div class="detail_info">
+            Weight: 0.05kg
+        </div>
+        <div class="detail_info">
+            Country of Origin: Germany
+        </div>
+        <div class="detail_info">
+            Brand: Bosch
+        </div>
+    </div>
+    <!--------------------Spare Part-------------------->
+
+    </body>
+</html>

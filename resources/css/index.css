@@ -1,0 +1,81 @@
+*{
+    text-decoration: none;
+}
+
+html {
+    width: 100%;
+    height: 100%;
+    display: grid;
+  }
+
+body{
+    margin: auto;
+    background-color: rgb(185, 209 , 233);
+}
+
+.btn-Radio{
+    font-size: 20px;
+    margin-bottom: 10px;
+}
+
+
+.login input{
+    font-size: 15px;
+    margin-bottom: 10px;
+}
+
+.clickbox{
+    flex-direction: row;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.logintext{
+    text-align: center;
+    font-size: 32px;
+    font-weight: 600;
+    margin-bottom: 20px;
+}
+
+.login{
+    padding: 30px 50px;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    border-radius: 3%;
+    background-color: white;
+}
+
+.login .btnLogin{
+    font-size: 18px;
+    font-weight: 600;
+    background-color: transparent;
+    color: black;
+    border: 2px solid rgb(185, 209 , 233);
+    padding: 8px 60px;
+    border-radius: 4px;
+    transition-duration: 0.4s;
+    cursor: pointer;
+}
+
+.login .btnLogin:hover{
+    background-color: rgb(185, 209 , 233);
+    color: black;
+}
+
+
+.uname, .upass{
+    height: 45px;
+    width: 100%;
+    outline: none;
+    font-size: 16px;
+    border-radius: 5px;
+    padding-left: 15px;
+    border: 1px solid #ccc;
+    border-bottom-width: 2px;
+    transition: all 0.3s ease;
+}
+
+.uname:focus, .upass:focus{
+    border-color: rgb(185, 209 , 233);
+}
