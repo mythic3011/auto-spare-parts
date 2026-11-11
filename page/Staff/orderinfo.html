@@ -33,20 +33,7 @@
     <script type="module" src="../../resources/js/module/api.js"></script>
     <script src="../../resources/js/module/config/endpoints.global.js"></script>
     <script type="module" src="../../resources/js/OrderAction.js"></script>
-    <script>
-        function printOrder(div) {
 
-            var printContents = document.getElementById(div).innerHTML;
-            var originalContents = document.body.innerHTML;
-
-            document.body.innerHTML = printContents;
-
-            window.print();
-
-
-            document.body.innerHTML = originalContents;
-        }
-    </script>
 
 
 <link rel="stylesheet" href="/resources/css/staff.css">
@@ -131,7 +118,7 @@
                     Cancel Order
                 </button>
             </div>
-            <button onclick="printOrder('order')" id="printBtn" class="bg-orange-500 hover:bg-orange-600 dark:bg-orange-600 dark:hover:bg-orange-700 text-white font-semibold py-2 px-4 rounded transition duration-300 ease-in-out focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-opacity-50">
+            <button onclick="window.print()" id="printBtn" class="bg-orange-500 hover:bg-orange-600 dark:bg-orange-600 dark:hover:bg-orange-700 text-white font-semibold py-2 px-4 rounded transition duration-300 ease-in-out focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-opacity-50">
                     Print Order
             </button>
     </div>

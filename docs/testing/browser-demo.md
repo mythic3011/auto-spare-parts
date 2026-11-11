@@ -112,3 +112,11 @@ Catalog search covers ID, name and description. Orders cover ID, sales manager,
 dealer and delivery address; the date range applies to the order date. Reports
 cover part ID, part name and associated order numbers. Counts show matching and
 loaded totals; filters update when the existing table reloads or sorts.
+
+## Order printing regression
+
+`npm --prefix scripts/demo run check:print` opens a seeded staff order and checks
+that printing preserves the page DOM and theme listeners, while print CSS hides
+navigation and actions. `PRINT_TEST_ORDER_ID` selects an existing order and
+`DEMO_BASE_URL` selects the running portal. It intercepts the print dialog and
+checks the browser's print media layout without changing order data.
