@@ -1,3 +1,7 @@
+> This historical plan includes proposed tests and old setup examples. Use
+> [audit fixes and reproducible validation](audit-fixes.md) for the current
+> disposable database commands and verified test results.
+
 # Auto Spare Parts - Comprehensive Testing Plan
 
 ## Overview

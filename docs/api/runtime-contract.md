@@ -70,10 +70,11 @@ runtime scripts require `VALIDATION_STACK=true` and must never target real data.
 Run from the repository root:
 
 ```sh
-docker compose -p itp-review-validation -f docker/compose.validation.yml up -d --build
-docker compose -p itp-review-validation -f docker/compose.validation.yml exec -T php php tests/Runtime/gateway-checkout.php
-docker compose -p itp-review-validation -f docker/compose.validation.yml exec -T php php tests/Runtime/order-migration.php
-docker compose -p itp-review-validation -f docker/compose.validation.yml down
+docker compose -p asp-validation -f docker/compose.validation.yml up -d --build
+COMPOSE_FILE=docker/compose.validation.yml COMPOSE_PROJECT_NAME=asp-validation TEST_DB_RESET=1 ./scripts/setup-test-db.sh
+docker compose -p asp-validation -f docker/compose.validation.yml exec -T php php tests/Runtime/gateway-checkout.php
+docker compose -p asp-validation -f docker/compose.validation.yml exec -T php php tests/Runtime/order-migration.php
+docker compose -p asp-validation -f docker/compose.validation.yml down
 php vendor/bin/phpunit --testsuite NewApi --no-logging
 php vendor/bin/phpunit tests/Unit/CheckoutAuthorityTest.php --no-logging
 ```
@@ -85,12 +86,12 @@ IDs, backfill, generated IDs and repeat execution on a disposable schema.
 `phpunit.xml` includes `apps/api/tests` in the default suite.
 
 The PHP image installs Composer dependencies from the committed lockfile, whose
-platform is PHP 8.3. Frontend `npm ci` currently fails because its manifest/lockfile
-are out of sync and include conflicting Svelte peers. For this fix, frontend tests
-and build were validated using an unsaved installation with `--legacy-peer-deps`
-and `@sveltejs/vite-plugin-svelte@7`; that does not repair reproducible frontend
-installation. Resolve that dependency slice before relying on a clean frontend
-build.
+platform is PHP 8.3. The frontend now has pinned SvelteKit 3 / Svelte 5 dependencies
+and a regenerated lockfile. A clean `npm --prefix apps/web ci --ignore-scripts`
+supports `npm --prefix apps/web run check`, `test`, and `build` without peer bypasses.
+It remains a separate migration target; building it does not implement the missing
+v1 domain endpoints. See [audit fixes](../testing/audit-fixes.md) for validation and
+the remaining upstream tooling advisory.
 
 ## Informational pages and checkout transition
 

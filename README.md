@@ -80,6 +80,7 @@ for implemented routes and isolated integration validation.
 
 - [Runtime, checkout migration, and integration validation](docs/api/runtime-contract.md)
 - [Browser checks, CSS build, and screenshot capture](docs/testing/browser-demo.md)
+- [Audit fixes and reproducible validation](docs/testing/audit-fixes.md)
 - [Testing plan](docs/testing/testing-plan.md)
 - [Implementation plan](docs/IMPLEMENTATION_PLAN.md)
 - [Historical setup notes](docs/archive/legacy-readme.md)
