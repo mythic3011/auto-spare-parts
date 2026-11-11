@@ -12,11 +12,9 @@ declare(strict_types=1);
 define('TESTING', true);
 putenv('APP_ENV=testing');
 putenv('APP_DEBUG=false');
-putenv('DOCKER_ENV=true');
-putenv('DB_DOCKER_HOST=mariadb');
-putenv('DB_DOCKER_USER=root');
-putenv('DB_DOCKER_PASSWORD=rootpassword');
-putenv('DB_DOCKER_NAME=projectdb_test');
+// Preserve explicit connection settings; resetTestDatabase validates its target.
+if (getenv('DB_DOCKER_NAME') === false) putenv('DB_DOCKER_NAME=projectdb_test');
+if (getenv('DB_NAME') === false) putenv('DB_NAME=projectdb_test');
 
 require_once __DIR__ . '/../apps/api/tests/bootstrap.php';
 
@@ -31,6 +29,7 @@ require_once $classDir . 'AuthFlow.php';
 require_once $classDir . 'UploadedImage.php';
 require_once $classDir . 'Database.php';
 require_once $classDir . 'Session.php';
+Session::begin();
 require_once $classDir . 'CSRF.php';
 require_once $classDir . 'Auth.php';
 require_once $classDir . 'User.php';
@@ -67,6 +66,10 @@ function resetTestDatabase(): void
         Cart::resetStateForTesting();
     }
 
+    $config = require __DIR__ . '/../resources/php/class/config.php';
+    if (!preg_match('/^[A-Za-z0-9_]+_test$/', (string) $config['db_name'])) {
+        throw new RuntimeException('Database resets require a database name ending in _test');
+    }
     $db = Database::getInstance();
 
     // Truncate transactional tables
@@ -131,5 +134,3 @@ function createTestOrder(string $dealerId, array $items = []): string
 
     return $order->placeOrder($orderData, $user);
 }
-
-echo "Test environment initialized\n";

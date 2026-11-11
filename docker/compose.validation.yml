@@ -16,7 +16,7 @@ services:
       APP_DEBUG: 'false'
       DOCKER_ENV: 'true'
       DB_DOCKER_HOST: mariadb
-      DB_DOCKER_NAME: projectDB
+      DB_DOCKER_NAME: projectdb_test
       DB_DOCKER_USER: root
       DB_DOCKER_PASSWORD: validation-only
       DB_QUERY_CACHE: 'false'
@@ -31,6 +31,8 @@ services:
     environment:
       MYSQL_ROOT_PASSWORD: validation-only
       MYSQL_DATABASE: projectdb_test
+    labels:
+      com.auto-spare-parts.disposable: 'true'
     tmpfs: [/var/lib/mysql]
     volumes:
       - ../sql-scripts/setup.sql:/docker-entrypoint-initdb.d/setup.sql:ro

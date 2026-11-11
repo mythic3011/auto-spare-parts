@@ -152,8 +152,8 @@ class OrderTest extends TestCase
     public function it_includes_item_count_in_order_list(): void
     {
         $orderId = createTestOrder('alex@auto-racing.com', [
-            ['itemID' => '1', 'quantity' => 1, 'price' => 5000, 'weight' => 70],
-            ['itemID' => '5', 'quantity' => 2, 'price' => 500, 'weight' => 1]
+            ['itemID' => '5', 'quantity' => 1],
+            ['itemID' => '7', 'quantity' => 1]
         ]);
 
         $orders = $this->order->getOrderListByDealer('alex@auto-racing.com');

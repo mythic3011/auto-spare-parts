@@ -1,125 +1,46 @@
-#!/bin/bash
-
-# Setup test database in Docker container
-# Usage: ./scripts/setup-test-db.sh
-
-set -e
+#!/usr/bin/env bash
+# Reset only an explicitly selected, marked disposable Compose database.
+set -euo pipefail
 
 PROJECT_ROOT="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/.." && pwd)"
 cd "$PROJECT_ROOT"
-DB_TEST="projectdb_test"
-DB_USER="root"
-DB_PASS="rootpassword"
-SQL_FILE="sql-scripts/setup.sql"
+: "${COMPOSE_FILE:?Set COMPOSE_FILE to the disposable stack definition}"
+: "${COMPOSE_PROJECT_NAME:?Set COMPOSE_PROJECT_NAME to the disposable stack name}"
+: "${TEST_DB_RESET:?Set TEST_DB_RESET=1 to reset the disposable test database}"
+[[ "$TEST_DB_RESET" == 1 ]] || { echo 'TEST_DB_RESET must be 1' >&2; exit 1; }
+export DB_TEST_NAME="${DB_TEST_NAME:-projectdb_test}"
+[[ "$DB_TEST_NAME" =~ ^[A-Za-z0-9_]+_test$ ]] || { echo 'Database name must end in _test' >&2; exit 1; }
+DB_TEST_USER="${DB_TEST_USER:-root}"
+SQL_FILE="${TEST_DB_SCHEMA:-sql-scripts/setup.sql}"
+[[ -r "$SQL_FILE" ]] || { echo 'Test schema is not readable' >&2; exit 1; }
+compose=(docker compose -p "$COMPOSE_PROJECT_NAME" -f "$COMPOSE_FILE")
+container="$("${compose[@]}" ps -q mariadb)"
+[[ -n "$container" ]] || { echo 'Start the disposable MariaDB service first' >&2; exit 1; }
+marker="$(docker inspect --format '{{ index .Config.Labels "com.auto-spare-parts.disposable" }}' "$container")"
+[[ "$marker" == true ]] || { echo 'Refusing to reset an unmarked database container' >&2; exit 1; }
 
-GREEN='\033[0;32m'
-RED='\033[0;31m'
-YELLOW='\033[1;33m'
-NC='\033[0m'
-
-echo "=========================================="
-echo " Auto Spare Parts - Test Database Setup"
-echo "=========================================="
-
-# Check Docker is running
-if ! docker info &>/dev/null; then
-    echo -e "${RED}✗ Docker / OrbStack is not running${NC}"
-    exit 1
-fi
-echo -e "${GREEN}✓ Docker running${NC}"
-CONTAINER="$(docker compose ps -q mariadb)"
-
-# Check container is up
-if ! docker compose ps --status running -q mariadb | grep -q .; then
-    echo -e "${YELLOW}⚠ MariaDB container not running, starting...${NC}"
-    docker compose up -d --wait mariadb
-    CONTAINER="$(docker compose ps -q mariadb)"
-    echo "  Waiting for MariaDB to be ready..."
-    sleep 5
-fi
-echo -e "${GREEN}✓ MariaDB container: ${CONTAINER}${NC}"
-
-# Wait until MariaDB accepts connections
-echo "  Checking MariaDB connection..."
-for i in {1..15}; do
-    if docker exec "$CONTAINER" mysqladmin -u"$DB_USER" -p"$DB_PASS" ping --silent 2>/dev/null; then
-        break
-    fi
-    echo "  Waiting... ($i/15)"
-    sleep 2
+# The container owns its credential. Never print it or place it in argv.
+mysql() {
+    "${compose[@]}" exec -T mariadb sh -eu -c '
+        export MYSQL_PWD="${MYSQL_ROOT_PASSWORD:?Missing container database credential}"
+        exec mysql "$@"
+    ' sh -u "$DB_TEST_USER" "$@"
+}
+ready=false
+for ((attempt=0; attempt<30; attempt++)); do
+    if mysql -Nse 'SELECT 1' >/dev/null 2>&1; then ready=true; break; fi
+    sleep 1
 done
-echo -e "${GREEN}✓ MariaDB accepting connections${NC}"
-
-# Drop and recreate test database
-echo ""
-echo "Creating test database '${DB_TEST}'..."
-docker exec "$CONTAINER" mysql -u"$DB_USER" -p"$DB_PASS" -e "
-    DROP DATABASE IF EXISTS \`${DB_TEST}\`;
-    CREATE DATABASE \`${DB_TEST}\` CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
-" 2>/dev/null
-echo -e "${GREEN}✓ Database '${DB_TEST}' created${NC}"
-
-# Import schema — strip CREATE DATABASE, fix USE, and remove transactional seed data
-echo "Importing schema from ${SQL_FILE}..."
-grep -v 'CREATE DATABASE' "$SQL_FILE" \
-    | sed "s/USE \`[^\`]*\`/USE \`${DB_TEST}\`/g" \
-    | docker exec -i "$CONTAINER" mysql -u"$DB_USER" -p"$DB_PASS" "$DB_TEST" 2>&1 \
-    | grep -v "^$" \
-    | grep -v "ERROR 1062" \
-    || true
-
-# Remove transactional seed data — tests manage their own Orders/OrdersItem
-echo "Clearing transactional seed data..."
-docker exec "$CONTAINER" mysql -u"$DB_USER" -p"$DB_PASS" "$DB_TEST" -e "
-    TRUNCATE TABLE Orders;
-    TRUNCATE TABLE OrdersItem;
-    TRUNCATE TABLE user_tokens;
-    TRUNCATE TABLE login_attempts;
-" 2>/dev/null
-echo -e "${GREEN}✓ Schema imported${NC}"
-
-# Verify tables
-echo ""
-echo "Verifying tables..."
-TABLES=$(docker exec "$CONTAINER" mysql -u"$DB_USER" -p"$DB_PASS" "$DB_TEST" -e "SHOW TABLES;" 2>/dev/null | tail -n +2)
-TABLE_COUNT=$(echo "$TABLES" | grep -c . || true)
-
-if [ "$TABLE_COUNT" -lt 5 ]; then
-    echo -e "${RED}✗ Expected at least 5 tables, found ${TABLE_COUNT}${NC}"
-    echo "$TABLES"
-    exit 1
-fi
-
-echo -e "${GREEN}✓ ${TABLE_COUNT} tables found:${NC}"
-echo "$TABLES" | sed 's/^/    /'
-
-# Verify seed data
-echo ""
-echo "Verifying seed data..."
-DEALERS=$(docker exec "$CONTAINER" mysql -u"$DB_USER" -p"$DB_PASS" "$DB_TEST" -se "SELECT COUNT(*) FROM Dealer;" 2>/dev/null)
-ITEMS=$(docker exec "$CONTAINER" mysql -u"$DB_USER" -p"$DB_PASS" "$DB_TEST" -se "SELECT COUNT(*) FROM Item;" 2>/dev/null)
-MANAGERS=$(docker exec "$CONTAINER" mysql -u"$DB_USER" -p"$DB_PASS" "$DB_TEST" -se "SELECT COUNT(*) FROM SalesManager;" 2>/dev/null)
-
-echo "    Dealers:       ${DEALERS}"
-echo "    Items:         ${ITEMS}"
-echo "    SalesManagers: ${MANAGERS}"
-
-if [ "$DEALERS" -lt 1 ] || [ "$ITEMS" -lt 1 ] || [ "$MANAGERS" -lt 1 ]; then
-    echo -e "${RED}✗ Seed data missing${NC}"
-    exit 1
-fi
-echo -e "${GREEN}✓ Seed data verified${NC}"
-
-echo ""
-echo "=========================================="
-echo -e "${GREEN} Test database ready!${NC}"
-echo "=========================================="
-echo ""
-echo "  Host:     mariadb (Docker) / 127.0.0.1:3306 (host)"
-echo "  Database: ${DB_TEST}"
-echo "  User:     ${DB_USER}"
-echo "  Password: ${DB_PASS}"
-echo ""
-echo "Run tests with:"
-echo "  docker compose exec php vendor/bin/phpunit"
-echo ""
+[[ "$ready" == true ]] || { echo 'MariaDB did not become ready' >&2; exit 1; }
+mysql -e "DROP DATABASE IF EXISTS \`$DB_TEST_NAME\`; CREATE DATABASE \`$DB_TEST_NAME\` CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;"
+# These anchored statements belong to the canonical legacy SQL seed.
+awk '/^CREATE DATABASE / { next } /^USE / { print "USE `" ENVIRON["DB_TEST_NAME"] "`;"; next } { print }' "$SQL_FILE" | mysql "$DB_TEST_NAME"
+mysql "$DB_TEST_NAME" -e 'DELETE FROM OrdersItem; DELETE FROM Orders; DELETE FROM user_tokens; DELETE FROM login_attempts;'
+for table in Dealer SalesManager Item Orders OrdersItem user_tokens login_attempts; do
+    mysql "$DB_TEST_NAME" -Nse "SELECT COUNT(*) FROM \`$table\`" >/dev/null
+done
+for table in Dealer SalesManager Item; do
+    count="$(mysql "$DB_TEST_NAME" -Nse "SELECT COUNT(*) FROM \`$table\`")"
+    [[ "$count" -gt 0 ]] || { echo "Missing seed rows in $table" >&2; exit 1; }
+done
+printf 'Disposable test database %s is ready.\n' "$DB_TEST_NAME"
