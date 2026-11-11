@@ -99,11 +99,11 @@ class User
         $params[] = $userId;
         $query = "UPDATE $table SET " . implode(', ', $updates) . " WHERE $idField = ?";
 
-        $result = $this->db->query($query, $params);
+        $result = $this->db->execute($query, $params);
         if ($result) {
             $this->updateSessionUser($userId);
         }
-        return $result !== false;
+        return true;
     }
 
 
@@ -147,7 +147,8 @@ class User
         $table = $isDealer ? 'Dealer' : 'SalesManager';
         $idField = $isDealer ? 'dealerID' : 'salesManagerID';
 
-        return $this->db->query("UPDATE $table SET password = ? WHERE $idField = ?", [$hashedPassword, $userId]) !== false;
+        $this->db->execute("UPDATE $table SET password = ? WHERE $idField = ?", [$hashedPassword, $userId]);
+        return true;
     }
 
     public function logout(): void

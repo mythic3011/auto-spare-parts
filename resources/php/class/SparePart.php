@@ -58,7 +58,8 @@ class SparePart
         $params[] = $sparePartId;
 
         $sql = "UPDATE Item SET " . implode(', ', $setClauses) . " WHERE sparePartNum = ?";
-        return $this->db->query($sql, $params) !== false;
+        $this->db->execute($sql, $params);
+        return true;
     }
 
     public function deleteSparePart(mixed $id): bool
@@ -68,7 +69,7 @@ class SparePart
 
     public function addSparePart(array $data): array
     {
-        if (!isset($data['sparePartNum']) || $data['sparePartNum'] === '' || $data['sparePartNum'] === null) {
+        if (!isset($data['sparePartNum']) || $data['sparePartNum'] === '') {
             throw new InvalidArgumentException('Valid spare part number is required');
         }
 
@@ -98,11 +99,7 @@ class SparePart
             $image,
         ];
 
-        $result = $this->db->query($sql, $params);
-
-        if ($result === false) {
-            throw new RuntimeException('Failed to add new spare part');
-        }
+        $this->db->execute($sql, $params);
 
         $insertedItem = $this->getSparePart($sparePartNum);
 
@@ -116,10 +113,6 @@ class SparePart
     public function getNewSparePartId(): int
     {
         $result = $this->db->query("SELECT MAX(sparePartNum) as max FROM Item");
-
-        if ($result === false) {
-            throw new RuntimeException('Database query failed');
-        }
 
         if (empty($result) || $result[0]['max'] === null) {
             return 1;

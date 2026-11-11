@@ -35,7 +35,7 @@ class PdoDatabaseAdapter extends AbstractDatabaseAdapter
             if ($statement->columnCount() > 0) {
                 $rows = $statement->fetchAll();
 
-                return is_array($rows) ? $rows : [];
+                return $rows;
             }
 
             return $statement->rowCount();

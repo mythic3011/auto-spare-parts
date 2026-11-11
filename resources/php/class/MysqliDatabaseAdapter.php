@@ -90,7 +90,7 @@ final class MysqliDatabaseAdapter extends AbstractDatabaseAdapter
         $this->connection()->rollback();
     }
 
-    public function lastInsertId(): int|string
+    public function lastInsertId(): int
     {
         return (int) $this->connection()->insert_id;
     }

@@ -43,7 +43,7 @@ class Cart
      */
     private function getSessionCartData(): ?array
     {
-        if (!isset($_SESSION) || !is_array($_SESSION) || session_status() !== PHP_SESSION_ACTIVE) {
+        if (!isset($_SESSION) || session_status() !== PHP_SESSION_ACTIVE) {
             if (is_array(self::$memoryCartState)) {
                 return [
                     'cartId' => (string) (self::$memoryCartState['cartId'] ?? ''),

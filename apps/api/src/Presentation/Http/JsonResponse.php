@@ -12,7 +12,6 @@ final class JsonResponse
     public static function success(array $data, int $status = 200): never
     {
         self::send($status, ['success' => true, 'data' => $data]);
-        exit;
     }
 
     public static function error(string $message, int $status): never

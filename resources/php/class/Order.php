@@ -191,7 +191,7 @@ class Order
      * Process a single order item
      *
      * @param string $orderID
-     * @param array<string, mixed>|object $item
+     * @param array<string, mixed> $item
      * @throws Exception
      */
     private function processOrderItem(string $orderID, array $item): void
@@ -545,7 +545,7 @@ class OrdersItem
         return $this->db->fetchAll(
             "SELECT * FROM OrdersItem WHERE orderID = ? ORDER BY sparePartNum",
             [$orderID]
-        ) ?? [];
+        );
     }
 
     /**
@@ -555,6 +555,6 @@ class OrdersItem
      */
     public function getOrdersItemList(): array
     {
-        return $this->db->fetchAll("SELECT * FROM OrdersItem ORDER BY orderID") ?? [];
+        return $this->db->fetchAll("SELECT * FROM OrdersItem ORDER BY orderID");
     }
 }

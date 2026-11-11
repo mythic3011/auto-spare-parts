@@ -11,13 +11,11 @@ if (is_readable($envFile)) {
         if (str_starts_with($line, '#') || !str_contains($line, '=')) {
             continue;
         }
-        [$key, $value] = explode('=', $line, 2) + [null, null];
-        if ($key !== null && $value !== null) {
-            $key = trim($key);
-            // Don't overwrite values already set in the environment
-            if (getenv($key) === false) {
-                putenv(sprintf('%s=%s', $key, trim($value)));
-            }
+        [$key, $value] = explode('=', $line, 2);
+        $key = trim($key);
+        // Don't overwrite values already set in the environment.
+        if (getenv($key) === false) {
+            putenv(sprintf('%s=%s', $key, trim($value)));
         }
     }
 }

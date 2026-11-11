@@ -21,7 +21,7 @@ final class ApiBootstrap
         }
 
         $origins = (defined('CONFIG') && is_array(CONFIG['origins'] ?? null)) ? CONFIG['origins'] : [];
-        $maxAge = defined('CONFIG') ? (int) (CONFIG['cors_max_age'] ?? 600) : 600;
+        $maxAge = defined('CONFIG') ? (int) CONFIG['cors_max_age'] : 600;
 
         if (self::method() === 'OPTIONS') {
             HttpPreflight::respond($origins, $maxAge);

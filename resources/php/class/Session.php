@@ -186,7 +186,7 @@ class Session
 
         if (ini_get('session.use_cookies')) {
             $params = session_get_cookie_params();
-            $this->deleteCookie(session_name(), $params['path'] ?? '/', $params['domain'] ?? null);
+            $this->deleteCookie(session_name(), $params['path'], $params['domain']);
         }
 
         foreach (['user', 'token', 'username', 'role', 'id'] as $cookieName) {
